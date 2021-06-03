@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "api",
+      "type": "com.revature.pantry.config.YamlConfig",
+      "sourceType": "com.revature.pantry.config.YamlConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "api.app-id",
+      "type": "java.lang.String",
+      "sourceType": "com.revature.pantry.config.YamlConfig"
+    },
+    {
+      "name": "api.app-key",
+      "type": "java.lang.String",
+      "sourceType": "com.revature.pantry.config.YamlConfig"
+    },
+    {
+      "name": "api.app_id",
+      "type": "java.lang.String",
+      "description": "Description for api.app_id."
+    }
+  ],
+  "hints": []
+}
