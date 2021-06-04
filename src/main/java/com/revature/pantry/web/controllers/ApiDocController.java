@@ -1,4 +1,4 @@
-package com.revature.pantry.controllers;
+package com.revature.pantry.web.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
