@@ -29,6 +29,27 @@ public class Recipe {
     @Column(nullable = false)
     private String url;
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<MealTime> getMealTimes() {
+        return mealTimes;
+    }
+
+    public void setMealTimes(List<MealTime> mealTimes) {
+        this.mealTimes = mealTimes;
+    }
+
+    private String image;
+
+    @Column(name = "ingredient_lines")
+    private String[] ingredientLines;
+
     @ManyToMany(mappedBy = "favoriteRecipes")
     private List<User> users;
 

@@ -1,4 +1,4 @@
-package com.revature.pantry.controllers;
+package com.revature.pantry.web.controllers;
 
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;

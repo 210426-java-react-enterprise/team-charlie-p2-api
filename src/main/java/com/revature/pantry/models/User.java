@@ -42,6 +42,14 @@ public class User {
     )
     List<Recipe> favoriteRecipes;
 
+    public List<Recipe> getFavoriteRecipes() {
+        return favoriteRecipes;
+    }
+
+    public List<MealPlan> getMealPlans() {
+        return mealPlans;
+    }
+
     @OneToMany(mappedBy = "user")
     List<MealPlan> mealPlans;
 
