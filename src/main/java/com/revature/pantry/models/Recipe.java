@@ -1,11 +1,14 @@
 package com.revature.pantry.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "recipes")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
 
     @Id
@@ -15,19 +18,30 @@ public class Recipe {
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("label")
     private String label;
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("calories")
     private int calories;
 
     @NotNull
     @Column(nullable = false)
-    private String yield;
+    @JsonProperty("yield")
+    private int yield;
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("url")
     private String url;
+
+    @JsonProperty("image")
+    private String image;
+
+    public Recipe(){
+        super();
+    }
 
     public String getImage() {
         return image;
@@ -45,7 +59,6 @@ public class Recipe {
         this.mealTimes = mealTimes;
     }
 
-    private String image;
 
     @Column(name = "ingredient_lines")
     private String[] ingredientLines;
@@ -80,11 +93,11 @@ public class Recipe {
         this.calories = calories;
     }
 
-    public String getYield() {
+    public int getYield() {
         return yield;
     }
 
-    public void setYield(String yield) {
+    public void setYield(int yield) {
         this.yield = yield;
     }
 
@@ -104,6 +117,15 @@ public class Recipe {
         this.users = users;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", calories=" + calories +
+                ", yield='" + yield + '\'' +
+                ", url='" + url + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
