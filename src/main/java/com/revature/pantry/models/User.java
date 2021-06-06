@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.UniqueElements;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,6 +40,17 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name="recipe_id")}
     )
     List<Recipe> favoriteRecipes;
+
+    @Enumerated(value = EnumType.STRING)
+    Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public List<Recipe> getFavoriteRecipes() {
         return favoriteRecipes;
@@ -83,5 +93,9 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public enum Role {
+        BASIC_USER, ADMIN;
     }
 }
