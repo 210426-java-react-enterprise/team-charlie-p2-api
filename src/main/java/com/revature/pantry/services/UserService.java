@@ -41,7 +41,7 @@ public class UserService {
         Predicate<String> isNullOrEmpty = str -> (str == null || str.trim().isEmpty());
         
         //Evaluates if the string passed is inside of the length range
-        BiPredicate<String, Integer> isLengthValid = (str, lenght) -> str.length() <= lenght;
+        BiPredicate<String, Integer> isLengthValid = (str, length) -> str.length() <= length;
         
         //Evaluates if the string passed satisfied the pattern passed
         BiPredicate<String, String> isPatternSatisfied = (str, pattern) -> {
