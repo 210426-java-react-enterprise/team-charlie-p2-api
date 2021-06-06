@@ -27,4 +27,5 @@ public class YamlConfig {
     public void setApp_key(String app_key) {
         this.app_key = app_key;
     }
+
 }
