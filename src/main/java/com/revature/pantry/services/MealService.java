@@ -4,6 +4,7 @@ import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -53,7 +54,7 @@ public class MealService {
         
         if(mealTime == null) return false;
         //mealTime > Contains alphabetic characters and we accept the strings breakfast, lunch, dinner and snack as value
-        if(isNullOrEmpty.test(mealTime.getMealTime()) || !isPatternSatisfied.test(mealTime.getMealTime(),"^[A-Za-z]+$") || !isValidTime.test(mealTime.getMealTime()))return false;
+        if(isNullOrEmpty.test(mealTime.getMealTime()) || !isPatternSatisfied.test(mealTime.getMealTime(),"^[A-Za-z]+$") || !isValidTime.test(mealTime.getMealTime().toLowerCase(Locale.ROOT)))return false;
     
         //Return this if passed all the constraints
         return true;
