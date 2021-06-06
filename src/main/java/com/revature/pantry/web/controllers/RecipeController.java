@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -25,7 +26,9 @@ public class RecipeController {
     @GetMapping(value = "/recipes", produces = APPLICATION_JSON_VALUE)
     public List<RecipeDTO> searchRecipes(@RequestParam String q){
         //TODO are the ingredient inputs valid? if not throw exception that will be caught by an ExceptionHandler aspect
-        //edamamService.isIngredientsValid(q);
+        edamamService.isIngredientValid(q);
 
         return edamamService.getRecipesFromEdamam(q);    }
+
+
 }

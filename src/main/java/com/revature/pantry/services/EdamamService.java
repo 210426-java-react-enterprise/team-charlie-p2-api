@@ -1,5 +1,6 @@
 package com.revature.pantry.services;
 
+import com.revature.pantry.exceptions.*;
 import com.revature.pantry.models.*;
 import com.revature.pantry.web.dtos.*;
 import org.springframework.beans.factory.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -42,6 +44,31 @@ public class EdamamService {
         hits.forEach((hit -> recipes.add(hit.getRecipe())));
 
         return recipes;
+    }
+    public boolean isIngredientValid(String q){
+        boolean check = false;
+        //splits q by plus signs
+        List<String> ingredients = Arrays.asList(q.split(" "));
+
+        //String regex = "^([a-zA-Z+]+){3,40}$|^[0]$";
+        //accounts for in case the user puts in a space between words
+        String regex = "^([a-zA-Z]+[ ]?[a-zA-Z]?){3,40}$|^[0]$";
+        StringBuilder invalidIngredients = new StringBuilder();
+
+        for (String ingredient: ingredients) {
+            if(Pattern.matches(regex, ingredient)){
+                check = true;
+            }
+            else{
+                invalidIngredients.append(ingredient).append(", ");
+            }
+        }
+
+
+        if(!check){
+            throw new InvalidIngredientException("Ingredient(s): " + invalidIngredients + "are not valid!");
+        }
+        return check;
     }
 
 }
