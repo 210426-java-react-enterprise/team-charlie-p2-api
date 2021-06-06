@@ -35,7 +35,7 @@ public class EdamamService {
 
         String apiUrl = String.format("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, app_id, app_key);
         ResponseEntity<Response> edamamResponse = restTemplate.getForEntity(apiUrl, Response.class);
-        System.out.println(edamamResponse.getStatusCode());
+        //System.out.println(edamamResponse.getStatusCode());
 
         Response response = Objects.requireNonNull(edamamResponse.getBody());
 
@@ -46,7 +46,7 @@ public class EdamamService {
         return recipes;
     }
     public boolean isIngredientValid(String q){
-        boolean check = false;
+        boolean check = true;
         //splits q by plus signs
         List<String> ingredients = Arrays.asList(q.split(" "));
 
@@ -57,10 +57,11 @@ public class EdamamService {
 
         for (String ingredient: ingredients) {
             if(Pattern.matches(regex, ingredient)){
-                check = true;
+
             }
             else{
                 invalidIngredients.append(ingredient).append(", ");
+                check = false;
             }
         }
 
