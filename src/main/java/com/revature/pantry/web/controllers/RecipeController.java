@@ -3,6 +3,7 @@ package com.revature.pantry.web.controllers;
 import com.revature.pantry.models.*;
 import com.revature.pantry.services.*;
 import com.revature.pantry.web.dtos.*;
+import com.revature.pantry.web.security.Secured;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class RecipeController {
     }
 
     @GetMapping(value = "/recipes", produces = APPLICATION_JSON_VALUE)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public List<RecipeDTO> searchRecipes(@RequestParam String q){
         edamamService.isIngredientValid(q);
         return edamamService.getRecipesFromEdamam(q);    }
