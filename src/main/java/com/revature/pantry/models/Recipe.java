@@ -11,6 +11,7 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
 
+
     @Id
     @Column(name = "recipe_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +40,19 @@ public class Recipe {
     @JsonProperty("image")
     private String image;
 
-    public Recipe(){
-        super();
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
+    private List<UserFavoriteRecipe> favorites;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "recipes")
+    private List<MealTime> mealTimes;
+
+    @Column(name = "ingredient_lines")
+    private String[] ingredientLines;
+
+    public Recipe() {
+
     }
 
     public String getImage() {
@@ -59,15 +71,6 @@ public class Recipe {
         this.mealTimes = mealTimes;
     }
 
-
-    @Column(name = "ingredient_lines")
-    private String[] ingredientLines;
-
-    @ManyToMany(mappedBy = "favoriteRecipes")
-    private List<User> users;
-
-    @ManyToMany(mappedBy = "recipes")
-    private List<MealTime> mealTimes;
 
     public int getId() {
         return id;
@@ -109,12 +112,13 @@ public class Recipe {
         this.url = url;
     }
 
-    public List<User> getUsers() {
-        return users;
+
+    public List<UserFavoriteRecipe> getFavorites() {
+        return favorites;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setFavorites(List<UserFavoriteRecipe> favorites) {
+        this.favorites = favorites;
     }
 
     @Override

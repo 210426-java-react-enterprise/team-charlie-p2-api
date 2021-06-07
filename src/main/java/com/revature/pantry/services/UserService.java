@@ -1,29 +1,40 @@
 package com.revature.pantry.services;
 
+
+import com.revature.pantry.exceptions.InvalidRequestException;
+import com.revature.pantry.models.Recipe;
 import com.revature.pantry.exceptions.UserDataIsInvalid;
 import com.revature.pantry.models.User;
+import com.revature.pantry.models.UserFavoriteRecipe;
+import com.revature.pantry.repos.FavoriteRecipeRepository;
+import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
-
 import java.util.function.BiPredicate;
-
 
 @Service
 @Transactional
 public class UserService {
 
     private UserRepository userRepository;
+    private FavoriteRecipeRepository favoriteRecipeRepository;
+    private RecipeRepository recipeRepository;
 
     @Autowired
-    public UserService (UserRepository userRepository) {
+    public UserService (UserRepository userRepository, RecipeRepository recipeRepository, FavoriteRecipeRepository favoriteRecipeRepository) {
         this.userRepository = userRepository;
+        this.recipeRepository = recipeRepository;
+        this.favoriteRecipeRepository = favoriteRecipeRepository;
     }
     
     public User authenticate (String username, String password) {
@@ -137,10 +148,55 @@ public class UserService {
             if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalid(field+": "+exceptionMessage);};
     }
 
-    @Transactional(readOnly = true)
     public User registerUser (User user) {
         user.setRole(User.Role.BASIC_USER);
         return userRepository.save(user);
+    }
+
+    public UserFavoriteRecipe addFavorite(String username, int recipeID) {
+        User user = userRepository.findUserByUsername(username);
+        Recipe recipe = recipeRepository.findById(recipeID)
+                .orElseThrow(InvalidRequestException::new);
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
+
+        UserFavoriteRecipe ufr = favorites.stream().filter(userFavoriteRecipe -> userFavoriteRecipe.getRecipe().getId() == recipeID)
+                .findFirst()
+                .orElseGet(UserFavoriteRecipe::new);
+
+        /*
+            prevent potentially duplicate favorite recipes from being inserted into our DB. If the user favorites the recipe once,
+            it already exists as favorite or not favorite
+         */
+        if(ufr.getId() == 0) {
+            ufr.setFavorite(true);
+            ufr.setUser(user);
+            ufr.setRecipe(recipe);
+            return favoriteRecipeRepository.save(ufr);
+        } else {
+            ufr.setFavorite(true);
+            return favoriteRecipeRepository.save(ufr);
+        }
+    }
+
+    public Set<Recipe> getFavoriteRecipes(String username) {
+        User user = userRepository.findUserByUsername(username);
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
+        Set<Recipe> recipes = new HashSet<>();
+        favorites.stream()
+                .filter(UserFavoriteRecipe::isFavorite)
+                .forEach(favorite -> recipes.add(favorite.getRecipe()));
+
+        return recipes;
+    }
+
+    public void removeFavorite(String username, int recipeID) {
+        User user = userRepository.findUserByUsername(username);
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
+        UserFavoriteRecipe noLongerFavorite = favorites.stream().filter(favorite -> favorite.getRecipe().getId() == recipeID)
+                .findFirst()
+                .orElseThrow(InvalidRequestException::new);
+        noLongerFavorite.setFavorite(false);
+        favoriteRecipeRepository.save(noLongerFavorite);
     }
 }
 

@@ -27,6 +27,7 @@ public class TokenGenerator {
                 .setId(Integer.toString(subject.getId()))
                 .setSubject(subject.getUsername())
                 .setIssuer("revature")
+                .claim("role", subject.getRole())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + jwtConfig.getExpiration()))
                 .signWith(jwtConfig.getSigAlg(), jwtConfig.getSigningKey());
