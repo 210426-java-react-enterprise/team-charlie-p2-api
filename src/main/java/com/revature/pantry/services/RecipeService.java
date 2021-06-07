@@ -43,9 +43,14 @@ public class RecipeService {
 	}
 	
 	public List<Recipe> saveAll(List<Recipe> recipes) {
-        for (Recipe recipe: recipes) {
-            isRecipeValid(recipe);
-        }
+       try{
+           for (Recipe recipe: recipes) {
+               isRecipeValid(recipe);
+           }
+       }catch (RecipeDataIsInvalid e){
+           e.printStackTrace();
+       }
+       
         return recipeRepository.saveAll(recipes);
 	}
 	
@@ -58,7 +63,7 @@ public class RecipeService {
      * @return - TRUE if data passed all the constraints
      * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
      */
-    public boolean isRecipeValid(Recipe recipe) throws UserDataIsInvalid{
+    public boolean isRecipeValid(Recipe recipe) throws RecipeDataIsInvalid{
     
         
         //Recipe cannot be null
@@ -92,7 +97,7 @@ public class RecipeService {
                                recipe.getUrl(),
                                "Must be a valid url address");
         
-        }catch(UserDataIsInvalid e){
+        }catch(RecipeDataIsInvalid e){
             throw e;
         }
     
@@ -110,12 +115,12 @@ public class RecipeService {
      * @param strToEval - the string value from the field to be evaluated
      * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalid {
+    private void isNullOrEmpty(String field,String strToEval) throws RecipeDataIsInvalid {
         
         //Evaluates if the string passed is null or empty
         Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
         
-        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalid(field+ ": empty or null");}
+        if(isNullOrEmptyPredicate.test(strToEval)) { throw new RecipeDataIsInvalid(field+ ": empty or null");}
         
     }
     
@@ -128,7 +133,7 @@ public class RecipeService {
      * @param exceptionMessage - Message in case of exception
      * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws UserDataIsInvalid{
+    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws RecipeDataIsInvalid{
         
         //Evaluates if the string passed satisfied the pattern passed
         BiPredicate<String, String> eval = ((str, pattern) -> {
@@ -136,7 +141,7 @@ public class RecipeService {
             Matcher patternValidation = patternToCompile.matcher(str);
             return patternValidation.matches();});
         
-        if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalid(field+": "+exceptionMessage);};
+        if(!eval.test(strToEval, inputPattern)){ throw new RecipeDataIsInvalid(field+": "+exceptionMessage);};
     }
     
 }
