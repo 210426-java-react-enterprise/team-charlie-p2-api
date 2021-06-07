@@ -5,6 +5,7 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -15,6 +16,7 @@ import java.util.function.BiPredicate;
 
 
 @Service
+@Transactional
 public class UserService {
 
     private UserRepository userRepository;
@@ -133,6 +135,12 @@ public class UserService {
             return patternValidation.matches();});
             
             if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalid(field+": "+exceptionMessage);};
+    }
+
+    @Transactional(readOnly = true)
+    public User registerUser (User user) {
+        user.setRole(User.Role.BASIC_USER);
+        return userRepository.save(user);
     }
 }
 
