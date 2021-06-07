@@ -46,13 +46,25 @@ public class UserService {
         User user = userRepository.findUserByUsername(username);
         Recipe recipe = recipeRepository.findById(recipeID)
                 .orElseThrow(InvalidRequestException::new);
-        UserFavoriteRecipe ufr = new UserFavoriteRecipe();
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
 
-        ufr.setFavorite(true);
-        ufr.setUser(user);
-        ufr.setRecipe(recipe);
-        favoriteRecipeRepository.save(ufr);
-        return ufr;
+        UserFavoriteRecipe ufr = favorites.stream().filter(userFavoriteRecipe -> userFavoriteRecipe.getRecipe().getId() == recipeID)
+                .findFirst()
+                .orElseGet(UserFavoriteRecipe::new);
+
+        /*
+        prevent potentially duplicate favorite recipes from being inserted into our DB. If the user favorites the recipe once,
+        it already exists as favorite or not favorite
+         */
+        if(ufr.getId() == 0) {
+            ufr.setFavorite(true);
+            ufr.setUser(user);
+            ufr.setRecipe(recipe);
+            return favoriteRecipeRepository.save(ufr);
+        } else {
+            ufr.setFavorite(true);
+            return favoriteRecipeRepository.save(ufr);
+        }
     }
 
     public Set<Recipe> getFavoriteRecipes(String username) {
