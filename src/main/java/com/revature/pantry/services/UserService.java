@@ -31,6 +31,7 @@ public class UserService {
     
     /**
      * This method is responsible for validate the user data inputs against the app constraints
+     *
      * @param user - User data to be audit
      * @return TRUE if data passed all the constraints
      * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
@@ -84,6 +85,7 @@ public class UserService {
     
     /**
      * This method is part of isUserValid
+     *
      * @param field - that we want to evaluate
      * @param strToEval - the string value from the field to be evaluated
      * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
@@ -98,6 +100,7 @@ public class UserService {
     
     /**
      * This method is part of isUserValid
+     *
      * @param field - that we want to evaluate
      * @param limit - to be evaluated with length of string
      * @param strToEval - the string value from the field to be evaluated
@@ -114,6 +117,7 @@ public class UserService {
     
     /**
      * This method is part of isUserValid
+     *
      * @param field - that we want to evaluate
      * @param inputPattern - used to run the evaluation
      * @param strToEval - the string value from the field to be evaluated

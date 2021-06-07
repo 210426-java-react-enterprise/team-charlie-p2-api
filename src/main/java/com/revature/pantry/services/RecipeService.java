@@ -1,6 +1,8 @@
 package com.revature.pantry.services;
 
 import com.revature.pantry.exceptions.InvalidRecipeException;
+import com.revature.pantry.exceptions.RecipeDataIsInvalid;
+import com.revature.pantry.exceptions.UserDataIsInvalid;
 import com.revature.pantry.models.Recipe;
 import com.revature.pantry.repos.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class RecipeService {
 	
 	
 	public Recipe findById(int id) {
-		return recipeRepository.findById(id).orElseThrow(InvalidRecipeException::new);
+        return recipeRepository.findById(id).orElseThrow(InvalidRecipeException::new);
 	}
 	
 	public Recipe findByUrl(String url) {
@@ -31,48 +33,111 @@ public class RecipeService {
 	}
 	
 	public Recipe save(Recipe recipe) {
+        try{
+            if(isRecipeValid(recipe));
+        }catch (RecipeDataIsInvalid e){
+            e.printStackTrace();
+        }
+        
 		return recipeRepository.save(recipe);
 	}
 	
 	public List<Recipe> saveAll(List<Recipe> recipes) {
-		return recipeRepository.saveAll(recipes);
+        for (Recipe recipe: recipes) {
+            isRecipeValid(recipe);
+        }
+        return recipeRepository.saveAll(recipes);
 	}
 	
 
+
     /**
      * This method is responsible for validate the recipe data inputs against the app constraints
+     *
      * @param recipe - Recipe data to be audit
-     * @return TRUE if data passed all the constraints / FALSE if not passed the constrains
+     * @return - TRUE if data passed all the constraints
+     * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
      */
+    public boolean isRecipeValid(Recipe recipe) throws UserDataIsInvalid{
     
-    public boolean isRecipeValid(Recipe recipe){
+        
+        //Recipe cannot be null
+        if(recipe == null){throw new RecipeDataIsInvalid("Please provide a not null object");}
     
+        try{
+            //CALORIES
+            //Not null or Empty
+            isNullOrEmpty("Calories", String.valueOf(recipe.getCalories()));
+            //Must contains numeric characters
+            isPatternSatisfied("Calories",
+                               "^[0-9]",
+                               String.valueOf(recipe.getCalories()),
+                               "It's not a numeric value");
+        
+            //YIELD
+            // Not Null or empty
+            isNullOrEmpty("Yield", recipe.getYield());
+            //Must contains numeric characters
+            isPatternSatisfied("Yield",
+                               "^[0-9]",
+                               recipe.getYield(),
+                               "It's not a numeric value");
+        
+            //URL
+            // Not null or empty
+            isNullOrEmpty("Url", recipe.getUrl());
+            //url > Not null and its a valid url address (Address must contains <http://]> or <https://>)
+            isPatternSatisfied("Ulr",
+                               "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
+                               recipe.getUrl(),
+                               "Must be a valid url address");
+        
+        }catch(UserDataIsInvalid e){
+            throw e;
+        }
     
-    //Evaluates if the string passed is null or empty
-    Predicate<String> isNullOrEmpty = str -> (str == null || str.trim().isEmpty());
-    
-    //Evaluates if the string passed satisfied the pattern passed
-    BiPredicate<String, String> isPatternSatisfied = (str, pattern) -> {
-        Pattern patternToCompile = Pattern.compile(pattern);
-        Matcher patternValidation = patternToCompile.matcher(str);
-        return patternValidation.matches();
-    };
-        
-        if(recipe == null) return false;
-        //calories > Not null and contains numeric characters
-        if(isNullOrEmpty.test(String.valueOf(recipe.getCalories())) || !isPatternSatisfied.test(String.valueOf(recipe.getCalories()) ,"^[0-9]")) return false;
-        
-        //yield > Not null and contains numeric characters
-        if(isNullOrEmpty.test(String.valueOf(recipe.getYield())) || !isPatternSatisfied.test(String.valueOf(recipe.getYield()) ,"^[0-9]")) return false;
-        
-        //url > Not null and its a valid url address (Address must contains <http://]> or <https://>)
-        if(isNullOrEmpty.test(recipe.getUrl()) || !isPatternSatisfied.test(recipe.getUrl(), "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")) return false;
-        
         //Return this if passed all the constraints
         return true;
         
+        
     }
-
+    
+    
+    /**
+     * This method is part of isRecipeValid
+     *
+     * @param field - that we want to evaluate
+     * @param strToEval - the string value from the field to be evaluated
+     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     */
+    private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalid {
+        
+        //Evaluates if the string passed is null or empty
+        Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
+        
+        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalid(field+ ": empty or null");}
+        
+    }
+    
+    /**
+     * This method is part of isRecipeValid
+     *
+     * @param field - that we want to evaluate
+     * @param inputPattern - used to run the evaluation
+     * @param strToEval - the string value from the field to be evaluated
+     * @param exceptionMessage - Message in case of exception
+     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     */
+    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws UserDataIsInvalid{
+        
+        //Evaluates if the string passed satisfied the pattern passed
+        BiPredicate<String, String> eval = ((str, pattern) -> {
+            Pattern patternToCompile = Pattern.compile(pattern);
+            Matcher patternValidation = patternToCompile.matcher(str);
+            return patternValidation.matches();});
+        
+        if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalid(field+": "+exceptionMessage);};
+    }
     
 }
 
