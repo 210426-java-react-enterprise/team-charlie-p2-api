@@ -53,8 +53,8 @@ public class UserService {
                 .orElseGet(UserFavoriteRecipe::new);
 
         /*
-        prevent potentially duplicate favorite recipes from being inserted into our DB. If the user favorites the recipe once,
-        it already exists as favorite or not favorite
+            prevent potentially duplicate favorite recipes from being inserted into our DB. If the user favorites the recipe once,
+            it already exists as favorite or not favorite
          */
         if(ufr.getId() == 0) {
             ufr.setFavorite(true);

@@ -58,12 +58,12 @@ public class AuthFilter implements Filter {
                     .getBody();
 
             Principal principal = new Principal(jwtClaims);
-            logger.info("THE REQUEST WAS PASSED THROUGH HERE!!!!!!!!!!!!!!! principal username: "  + principal.getUsername());
             req.setAttribute("principal", principal);
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn(String.format("%s was passed from AuthFilter with message: %s", e.getClass().getSimpleName(), e.getMessage()));
+
         }
     }
 }

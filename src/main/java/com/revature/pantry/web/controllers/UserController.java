@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
-    @Secured(allowedRoles = {"ADMIN"})
+    @Secured(allowedRoles = {"ADMIN", "BASIC_USER"})
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -72,6 +72,5 @@ public class UserController {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.removeFavorite(username, id);
     }
-
 
 }
