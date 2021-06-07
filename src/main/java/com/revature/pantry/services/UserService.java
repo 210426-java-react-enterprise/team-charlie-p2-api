@@ -3,12 +3,18 @@ package com.revature.pantry.services;
 import com.revature.pantry.exceptions.InvalidRequestException;
 import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
+import com.revature.pantry.models.UserFavoriteRecipe;
+import com.revature.pantry.repos.FavoriteRecipeRepository;
+import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,10 +22,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private UserRepository userRepository;
+    private FavoriteRecipeRepository favoriteRecipeRepository;
+    private RecipeRepository recipeRepository;
 
     @Autowired
-    public UserService (UserRepository userRepository) {
+    public UserService (UserRepository userRepository, RecipeRepository recipeRepository, FavoriteRecipeRepository favoriteRecipeRepository) {
         this.userRepository = userRepository;
+        this.recipeRepository = recipeRepository;
+        this.favoriteRecipeRepository = favoriteRecipeRepository;
     }
 
 
@@ -32,28 +42,38 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void addFavorite(int id, Recipe recipe) {
-        User user = userRepository.findById(id)
+    public UserFavoriteRecipe addFavorite(String username, int recipeID) {
+        User user = userRepository.findUserByUsername(username);
+        Recipe recipe = recipeRepository.findById(recipeID)
                 .orElseThrow(InvalidRequestException::new);
-        user.getFavoriteRecipes().add(recipe);
-        userRepository.save(user);
+        UserFavoriteRecipe ufr = new UserFavoriteRecipe();
+
+        ufr.setFavorite(true);
+        ufr.setUser(user);
+        ufr.setRecipe(recipe);
+        favoriteRecipeRepository.save(ufr);
+        return ufr;
     }
 
-    public List<Recipe> getFavoriteRecipes(int id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(InvalidRequestException::new);
-        return user.getFavoriteRecipes();
+    public Set<Recipe> getFavoriteRecipes(String username) {
+        User user = userRepository.findUserByUsername(username);
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
+        Set<Recipe> recipes = new HashSet<>();
+        favorites.stream()
+                .filter(UserFavoriteRecipe::isFavorite)
+                .forEach(favorite -> recipes.add(favorite.getRecipe()));
+
+        return recipes;
     }
 
-    public void removeFavorite(int id) {
-        User user = userRepository.findById(id)
+    public void removeFavorite(String username, int recipeID) {
+        User user = userRepository.findUserByUsername(username);
+        Set<UserFavoriteRecipe> favorites = favoriteRecipeRepository.findByUserId(user.getId());
+        UserFavoriteRecipe noLongerFavorite = favorites.stream().filter(favorite -> favorite.getRecipe().getId() == recipeID)
+                .findFirst()
                 .orElseThrow(InvalidRequestException::new);
-
-        user.setFavoriteRecipes(user.getFavoriteRecipes()
-                    .stream()
-                    .filter(recipe -> recipe.getId() != id)
-                    .collect(Collectors.toList()));
-        userRepository.save(user);
+        noLongerFavorite.setFavorite(false);
+        favoriteRecipeRepository.save(noLongerFavorite);
     }
 
 }

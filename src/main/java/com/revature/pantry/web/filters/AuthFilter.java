@@ -7,33 +7,36 @@ import io.jsonwebtoken.Jwts;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter("/*")
-public class AuthFilter extends HttpFilter {
+//@WebFilter("/*")
+@Component
+public class AuthFilter implements Filter {
 
     private Logger logger = LogManager.getLogger();
     private JwtConfig jwtConfig;
 
+    @Override
     public void init(FilterConfig cfg) {
         ApplicationContext container = WebApplicationContextUtils.getRequiredWebApplicationContext(cfg.getServletContext());
         this.jwtConfig = container.getBean(JwtConfig.class);
     }
 
     @Override
-    public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
             throws ServletException, IOException {
-        parseToken(req);
-        chain.doFilter(req, resp);
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) resp;
+        parseToken(request);
+        chain.doFilter(request, response);
     }
 
     private void parseToken(HttpServletRequest req) {
@@ -54,7 +57,10 @@ public class AuthFilter extends HttpFilter {
                     .parseClaimsJws(token)
                     .getBody();
 
-            req.setAttribute("principal", new Principal(jwtClaims));
+            Principal principal = new Principal(jwtClaims);
+            logger.info("THE REQUEST WAS PASSED THROUGH HERE!!!!!!!!!!!!!!! principal username: "  + principal.getUsername());
+            req.setAttribute("principal", principal);
+
 
         } catch (Exception e) {
             e.printStackTrace();
