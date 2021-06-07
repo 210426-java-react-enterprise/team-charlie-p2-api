@@ -45,6 +45,7 @@ public class EdamamService {
 
         return recipes;
     }
+
     public boolean isIngredientValid(String q){
         boolean check = true;
         //splits q by plus signs

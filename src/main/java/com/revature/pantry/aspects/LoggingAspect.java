@@ -15,7 +15,7 @@ public class LoggingAspect {
 
     private final Logger logger = LogManager.getLogger();
 
-    @Pointcut("within(com.revature.pantry..*)")
+    @Pointcut("within(com.revature.pantry..*) && !within(com.revature.pantry.web.filters..*)")
     public void logAll() {}
 
     @Before("logAll()")
