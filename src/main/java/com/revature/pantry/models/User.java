@@ -56,6 +56,10 @@ public class User {
         return favoriteRecipes;
     }
 
+    public void setFavoriteRecipes(List<Recipe> favoriteRecipes) {
+        this.favoriteRecipes = favoriteRecipes;
+    }
+
     public List<MealPlan> getMealPlans() {
         return mealPlans;
     }
