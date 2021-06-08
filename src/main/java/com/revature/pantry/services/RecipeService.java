@@ -81,11 +81,11 @@ public class RecipeService {
         
             //YIELD
             // Not Null or empty
-            isNullOrEmpty("Yield", recipe.getYield());
+            isNullOrEmpty("Yield", String.valueOf(recipe.getYield()));
             //Must contains numeric characters
             isPatternSatisfied("Yield",
                                "^[0-9]",
-                               recipe.getYield(),
+                               String.valueOf(recipe.getYield()),
                                "It's not a numeric value");
         
             //URL
