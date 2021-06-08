@@ -3,7 +3,7 @@ package com.revature.pantry.services;
 
 import com.revature.pantry.exceptions.InvalidRequestException;
 import com.revature.pantry.models.Recipe;
-import com.revature.pantry.exceptions.UserDataIsInvalid;
+import com.revature.pantry.exceptions.UserDataIsInvalidException;
 import com.revature.pantry.models.User;
 import com.revature.pantry.models.UserFavoriteRecipe;
 import com.revature.pantry.repos.FavoriteRecipeRepository;
@@ -12,11 +12,9 @@ import com.revature.pantry.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -47,12 +45,12 @@ public class UserService {
      *
      * @param user - User data to be audit
      * @return TRUE if data passed all the constraints
-     * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
+     * @throws UserDataIsInvalidException - Return this exception if the User Data not satisfied the constraints
      */
-    private boolean isUserValid(User user) throws UserDataIsInvalid{
+    private boolean isUserValid(User user) throws UserDataIsInvalidException {
         
         //User cannot be null
-        if(user == null){throw new UserDataIsInvalid("Please provide a not null object");}
+        if(user == null){throw new UserDataIsInvalidException("Please provide a not null object");}
         
         try{
             //USERNAME
@@ -88,7 +86,7 @@ public class UserService {
                                user.getEmail(),
                                "Must be a valid email address");
             
-        }catch(UserDataIsInvalid e){
+        }catch(UserDataIsInvalidException e){
             throw e;
         }
         
@@ -101,14 +99,14 @@ public class UserService {
      *
      * @param field - that we want to evaluate
      * @param strToEval - the string value from the field to be evaluated
-     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalid {
+    private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalidException {
         
         //Evaluates if the string passed is null or empty
         Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
         
-        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalid(field+ ": empty or null");}
+        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalidException(field+ ": empty or null");}
         }
     
     /**
@@ -117,14 +115,14 @@ public class UserService {
      * @param field - that we want to evaluate
      * @param limit - to be evaluated with length of string
      * @param strToEval - the string value from the field to be evaluated
-     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isLengthValid(String field, int limit, String strToEval) throws UserDataIsInvalid{
+    private void isLengthValid(String field, int limit, String strToEval) throws UserDataIsInvalidException {
        
         //Evaluates if the string passed is inside of the length range
         BiPredicate<String, Integer> eval = (str, length) -> str.length() > length;
     
-        if(!eval.test(strToEval,20)){throw new UserDataIsInvalid(field+ ": has more than "+limit+" characters");}
+        if(!eval.test(strToEval,20)){throw new UserDataIsInvalidException(field+ ": has more than "+limit+" characters");}
         
     }
     
@@ -135,9 +133,9 @@ public class UserService {
      * @param inputPattern - used to run the evaluation
      * @param strToEval - the string value from the field to be evaluated
      * @param exceptionMessage - Message in case of exception
-     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws UserDataIsInvalid{
+    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws UserDataIsInvalidException {
         
         //Evaluates if the string passed satisfied the pattern passed
         BiPredicate<String, String> eval = ((str, pattern) -> {
@@ -145,7 +143,7 @@ public class UserService {
             Matcher patternValidation = patternToCompile.matcher(str);
             return patternValidation.matches();});
             
-            if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalid(field+": "+exceptionMessage);};
+            if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalidException(field+": "+exceptionMessage);};
     }
 
     public User registerUser (User user) {

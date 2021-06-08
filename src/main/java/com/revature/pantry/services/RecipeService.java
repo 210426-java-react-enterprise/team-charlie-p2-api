@@ -1,8 +1,8 @@
 package com.revature.pantry.services;
 
 import com.revature.pantry.exceptions.InvalidRecipeException;
-import com.revature.pantry.exceptions.RecipeDataIsInvalid;
-import com.revature.pantry.exceptions.UserDataIsInvalid;
+import com.revature.pantry.exceptions.RecipeDataIsInvalidException;
+import com.revature.pantry.exceptions.UserDataIsInvalidException;
 import com.revature.pantry.models.Recipe;
 import com.revature.pantry.repos.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,8 @@ public class RecipeService {
 	}
 	
 	public Recipe save(Recipe recipe) {
-        try{
-            if(isRecipeValid(recipe));
-        }catch (RecipeDataIsInvalid e){
-            throw e;
-        }
-        
-		return recipeRepository.save(recipe);
+        isRecipeValid(recipe);
+        return recipeRepository.save(recipe);
 	}
 	
 	public List<Recipe> saveAll(List<Recipe> recipes) {
@@ -47,7 +42,7 @@ public class RecipeService {
            for (Recipe recipe: recipes) {
                isRecipeValid(recipe);
            }
-       }catch (RecipeDataIsInvalid e){
+       }catch (RecipeDataIsInvalidException e){
            e.printStackTrace();
        }
        
@@ -61,13 +56,13 @@ public class RecipeService {
      *
      * @param recipe - Recipe data to be audit
      * @return - TRUE if data passed all the constraints
-     * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
+     * @throws UserDataIsInvalidException - Return this exception if the User Data not satisfied the constraints
      */
-    public boolean isRecipeValid(Recipe recipe) throws RecipeDataIsInvalid{
+    public boolean isRecipeValid(Recipe recipe) throws RecipeDataIsInvalidException {
     
         
         //Recipe cannot be null
-        if(recipe == null){throw new RecipeDataIsInvalid("Please provide a not null object");}
+        if(recipe == null){throw new RecipeDataIsInvalidException("Please provide a not null object");}
     
         try{
             //CALORIES
@@ -84,7 +79,7 @@ public class RecipeService {
             isNullOrEmpty("Yield", String.valueOf(recipe.getYield()));
             //Must contains numeric characters
             isPatternSatisfied("Yield",
-                               "^[0-9]",
+                               "^[0-9]*$",
                                String.valueOf(recipe.getYield()),
                                "It's not a numeric value");
         
@@ -97,7 +92,7 @@ public class RecipeService {
                                recipe.getUrl(),
                                "Must be a valid url address");
         
-        }catch(RecipeDataIsInvalid e){
+        }catch(RecipeDataIsInvalidException e){
             throw e;
         }
     
@@ -113,14 +108,14 @@ public class RecipeService {
      *
      * @param field - that we want to evaluate
      * @param strToEval - the string value from the field to be evaluated
-     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isNullOrEmpty(String field,String strToEval) throws RecipeDataIsInvalid {
+    private void isNullOrEmpty(String field,String strToEval) throws RecipeDataIsInvalidException {
         
         //Evaluates if the string passed is null or empty
         Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
         
-        if(isNullOrEmptyPredicate.test(strToEval)) { throw new RecipeDataIsInvalid(field+ ": empty or null");}
+        if(isNullOrEmptyPredicate.test(strToEval)) { throw new RecipeDataIsInvalidException(field+ ": empty or null");}
         
     }
     
@@ -131,9 +126,9 @@ public class RecipeService {
      * @param inputPattern - used to run the evaluation
      * @param strToEval - the string value from the field to be evaluated
      * @param exceptionMessage - Message in case of exception
-     * @throws UserDataIsInvalid - Exception returned if the strToEval doesn't pass the evaluation
+     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
      */
-    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws RecipeDataIsInvalid{
+    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws RecipeDataIsInvalidException {
         
         //Evaluates if the string passed satisfied the pattern passed
         BiPredicate<String, String> eval = ((str, pattern) -> {
@@ -141,7 +136,7 @@ public class RecipeService {
             Matcher patternValidation = patternToCompile.matcher(str);
             return patternValidation.matches();});
         
-        if(!eval.test(strToEval, inputPattern)){ throw new RecipeDataIsInvalid(field+": "+exceptionMessage);};
+        if(!eval.test(strToEval, inputPattern)){ throw new RecipeDataIsInvalidException(field+": "+exceptionMessage);};
     }
     
 }
