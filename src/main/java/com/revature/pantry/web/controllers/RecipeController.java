@@ -29,7 +29,7 @@ public class RecipeController {
 	}
 
 	@GetMapping(value = "/find/id", produces = APPLICATION_JSON_VALUE)
-	public Recipe findRecipeById(@RequestBody Integer id) {
+	public Recipe findRecipeById(@RequestParam Integer id) {
 		return recipeService.findById(id);
 	}
 
