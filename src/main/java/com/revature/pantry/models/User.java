@@ -1,11 +1,10 @@
 package com.revature.pantry.models;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +14,7 @@ public class User {
     public User() {
 
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,24 +34,36 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @ManyToMany (cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "user_favorite_recipes",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name="recipe_id")}
-    )
-    List<Recipe> favoriteRecipes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    List<MealPlan> mealPlans;
 
-    public List<Recipe> getFavoriteRecipes() {
-        return favoriteRecipes;
+    @Enumerated(value = EnumType.STRING)
+    Role role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserFavoriteRecipe> favorites;
+
+    public List<UserFavoriteRecipe> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<UserFavoriteRecipe> favorites) {
+        this.favorites = favorites;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<MealPlan> getMealPlans() {
         return mealPlans;
     }
-
-    @OneToMany(mappedBy = "user")
-    List<MealPlan> mealPlans;
 
     public int getId() {
         return id;
@@ -83,5 +95,9 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public enum Role {
+        BASIC_USER, ADMIN;
     }
 }

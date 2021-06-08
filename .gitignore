@@ -31,3 +31,10 @@ hs_err_pid*
 
 #test controller
 src/main/java/com/revature/pantry/web/controllers/TestController.java
+src/main/java/com/revature/pantry/web/controllers/OAuthController.java
+
+#HTTPS certificate
+*.p12
+
+#test import files
+*.sql

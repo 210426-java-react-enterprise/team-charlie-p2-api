@@ -1,12 +1,16 @@
 package com.revature.pantry.models;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "recipes")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Recipe {
+
 
     @Id
     @Column(name = "recipe_id")
@@ -15,19 +19,41 @@ public class Recipe {
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("label")
     private String label;
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("calories")
     private int calories;
 
     @NotNull
     @Column(nullable = false)
-    private String yield;
+    @JsonProperty("yield")
+    private int yield;
 
     @NotNull
     @Column(nullable = false)
+    @JsonProperty("url")
     private String url;
+
+    @JsonProperty("image")
+    private String image;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
+    private List<UserFavoriteRecipe> favorites;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "recipes")
+    private List<MealTime> mealTimes;
+
+    @Column(name = "ingredient_lines")
+    private String[] ingredientLines;
+
+    public Recipe() {
+
+    }
 
     public String getImage() {
         return image;
@@ -45,16 +71,6 @@ public class Recipe {
         this.mealTimes = mealTimes;
     }
 
-    private String image;
-
-    @Column(name = "ingredient_lines")
-    private String[] ingredientLines;
-
-    @ManyToMany(mappedBy = "favoriteRecipes")
-    private List<User> users;
-
-    @ManyToMany(mappedBy = "recipes")
-    private List<MealTime> mealTimes;
 
     public int getId() {
         return id;
@@ -80,11 +96,11 @@ public class Recipe {
         this.calories = calories;
     }
 
-    public String getYield() {
+    public int getYield() {
         return yield;
     }
 
-    public void setYield(String yield) {
+    public void setYield(int yield) {
         this.yield = yield;
     }
 
@@ -96,14 +112,24 @@ public class Recipe {
         this.url = url;
     }
 
-    public List<User> getUsers() {
-        return users;
+
+    public List<UserFavoriteRecipe> getFavorites() {
+        return favorites;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setFavorites(List<UserFavoriteRecipe> favorites) {
+        this.favorites = favorites;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", label='" + label + '\'' +
+                ", calories=" + calories +
+                ", yield='" + yield + '\'' +
+                ", url='" + url + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
