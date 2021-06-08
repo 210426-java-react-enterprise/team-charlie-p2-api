@@ -1,7 +1,10 @@
 package com.revature.pantry.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -12,9 +15,18 @@ public class MealTime {
     @Column(name = "meal_time_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    
+    //Moved from MealPlan to here
+    @NotNull
+    @Column(name = "meal_date")
+    @JsonProperty("date")
+    LocalDate date;
+    
+    @NotNull
+    @Column
+    @JsonProperty("time")
     private String mealTime;
-
+    
     @ManyToMany (cascade = {CascadeType.ALL})
     @JoinTable(
             name = "recipe_meal_times",
@@ -38,5 +50,12 @@ public class MealTime {
     public void setMealTime(String mealTime) {
         this.mealTime = mealTime;
     }
-
+    
+    public LocalDate getDate() {
+        return date;
+    }
+    
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }

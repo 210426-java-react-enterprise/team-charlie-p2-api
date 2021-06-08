@@ -12,9 +12,12 @@ public class MealPlan {
     @Column(name = "meal_plan_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(name = "meal_date")
-    LocalDate date;
+    
+// I moved to mealTime
+//    @Column(name = "meal_date")
+//    LocalDate date;
+    
+    //Add Many to Many
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,13 +32,13 @@ public class MealPlan {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+//    public LocalDate getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(LocalDate date) {
+//        this.date = date;
+//    }
 
     public User getUser() {
         return user;

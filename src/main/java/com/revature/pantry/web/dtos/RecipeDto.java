@@ -5,7 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public class RecipeDTO {
+    public class RecipeDto {
 
         @JsonProperty("label")
         private String label;
@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
         @JsonProperty("image")
         private String image;
 
-        public RecipeDTO(){
+        public RecipeDto(){
             super();
         }
 

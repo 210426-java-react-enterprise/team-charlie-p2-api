@@ -34,14 +34,14 @@ public class MealService {
         if(mealPlan == null){throw new MealDataIsInvalidException("Please provide a not null object");}
     
         try{
-            //DATE
-            //Not null or Empty
-            isNullOrEmpty("Date", String.valueOf(mealPlan.getDate()));
-            //Must contains numeric characters
-            isPatternSatisfied("Date",
-                               "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$",
-                               String.valueOf(mealPlan.getDate()),
-                               "Not valid date format");
+//            //DATE
+//            //Not null or Empty
+//            isNullOrEmpty("Date", String.valueOf(mealPlan.getDate()));
+//            //Must contains numeric characters
+//            isPatternSatisfied("Date",
+//                               "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$",
+//                               String.valueOf(mealPlan.getDate()),
+//                               "Not valid date format");
         
             //USER
             // Not Null or empty
@@ -85,6 +85,16 @@ public class MealService {
         if(mealTime == null){throw new MealDataIsInvalidException("Please provide a not null object");}
     
         try{
+            
+            //Moved from MealPlan
+            //DATE
+            //Not null or Empty
+            isNullOrEmpty("Date", String.valueOf(mealTime.getDate()));
+            //Must contains numeric characters
+            isPatternSatisfied("Date",
+                               "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$",
+                               String.valueOf(mealTime.getDate()),
+                               "Not valid date format");
             //MEAL TIME
             //Not null or Empty
             isNullOrEmpty("Meal Time", String.valueOf(mealTime.getMealTime()));

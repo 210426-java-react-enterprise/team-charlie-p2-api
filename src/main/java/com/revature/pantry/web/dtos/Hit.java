@@ -1,15 +1,12 @@
 package com.revature.pantry.web.dtos;
 
 import com.fasterxml.jackson.annotation.*;
-import com.revature.pantry.models.*;
-
-import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Hit {
 
     @JsonProperty("recipe")
-    private RecipeDTO recipe;
+    private RecipeDto recipe;
 
     @JsonProperty("bookmarked")
     private boolean bookmarked;
@@ -17,7 +14,7 @@ public class Hit {
     @JsonProperty("bought")
     private boolean bought;
 
-    public RecipeDTO getRecipe() {
+    public RecipeDto getRecipe() {
         return recipe;
     }
 

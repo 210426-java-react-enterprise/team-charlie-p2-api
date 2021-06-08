@@ -7,10 +7,8 @@ import com.revature.pantry.services.*;
 import com.revature.pantry.web.dtos.*;
 import com.revature.pantry.web.security.Secured;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.*;
 
 import java.util.*;
-import java.util.regex.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -58,7 +56,7 @@ public class RecipeController {
 
   @GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
   @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
-  public List<RecipeDTO> searchRecipes(@RequestParam String q){
+  public List<RecipeDto> searchRecipes(@RequestParam String q){
     edamamService.isIngredientValid(q);
     return edamamService.getRecipesFromEdamam(q);    
   }
