@@ -70,7 +70,7 @@ public class RecipeService {
             isNullOrEmpty("Calories", String.valueOf(recipe.getCalories()));
             //Must contains numeric characters
             isPatternSatisfied("Calories",
-                               "^[0-9]",
+                               "^[0-9]*$",
                                String.valueOf(recipe.getCalories()),
                                "It's not a numeric value");
         
