@@ -151,7 +151,13 @@ public class UserService {
 
     public User registerUser(User user) {
         user.setRole(User.Role.BASIC_USER);
-        return userRepository.save(user);
+        User registeredUser = null;
+        try{
+            registeredUser = userRepository.save(user);
+        }catch(Exception e){
+            throw new RegisteredUserAlreadyExistsException("The registered email or username already exists!");
+        }
+        return registeredUser;
     }
 
     public UserDTO addFavorite(RecipeDTO recipeDTO, String username) {
