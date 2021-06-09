@@ -32,4 +32,8 @@ public class ExceptionHandlerAspect {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AuthorizationException.class)
     public void handleAuthorizationException() { }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ResourcePersistenceException.class)
+    public void handleResourcePersistenceException() { }
 }
