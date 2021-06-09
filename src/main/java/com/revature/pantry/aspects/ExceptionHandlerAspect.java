@@ -34,6 +34,6 @@ public class ExceptionHandlerAspect {
     public void handleAuthorizationException() { }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(RegisteredUserAlreadyExistsException.class)
-    public void handleRegisteredUserAlreadyExistsException() { }
+    @ExceptionHandler(ResourcePersistenceException.class)
+    public void handleResourcePersistenceException() { }
 }

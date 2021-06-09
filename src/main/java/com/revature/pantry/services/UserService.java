@@ -155,7 +155,7 @@ public class UserService {
         try{
             registeredUser = userRepository.save(user);
         }catch(Exception e){
-            throw new RegisteredUserAlreadyExistsException("The registered email or username already exists!");
+            throw new ResourcePersistenceException("The registered email or username already exists!");
         }
         return registeredUser;
     }
