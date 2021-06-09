@@ -75,24 +75,24 @@ public class RecipeService {
             isNullOrEmpty("Calories", String.valueOf(recipe.getCalories()));
             //Must contains numeric characters
             isPatternSatisfied("Calories",
-                               "^[0-9]",
+                               "^[0-9]*$",
                                String.valueOf(recipe.getCalories()),
                                "It's not a numeric value");
         
             //YIELD
             // Not Null or empty
-            isNullOrEmpty("Yield", recipe.getYield());
+            isNullOrEmpty("Yield", Integer.toString(recipe.getYield()));
             //Must contains numeric characters
             isPatternSatisfied("Yield",
-                               "^[0-9]",
-                               recipe.getYield(),
+                               "^[0-9]*$",
+                               String.valueOf(recipe.getYield()),
                                "It's not a numeric value");
         
             //URL
             // Not null or empty
             isNullOrEmpty("Url", recipe.getUrl());
             //url > Not null and its a valid url address (Address must contains <http://]> or <https://>)
-            isPatternSatisfied("Ulr",
+            isPatternSatisfied("Url",
                                "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)",
                                recipe.getUrl(),
                                "Must be a valid url address");
