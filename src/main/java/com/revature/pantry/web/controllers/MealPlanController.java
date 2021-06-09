@@ -11,10 +11,7 @@ import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.MealPlanDTO;
 import com.revature.pantry.web.dtos.MealTimeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -40,7 +37,7 @@ public class MealPlanController {
                 this.userService = userService;
         }
         
-        @GetMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+        @PostMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
         public MealPlan savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
                 
                 MealPlan mealPlanToSave = new MealPlan();
@@ -50,7 +47,6 @@ public class MealPlanController {
                 mealPlanToSave.setUser(user);
                 
                 mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
-
                         Map<String, Integer> supportMap = mealTimeDTO.getDayPlan();
                         supportMap.forEach((time, recipeId)->{
                                 MealTime mealTime = new MealTime();

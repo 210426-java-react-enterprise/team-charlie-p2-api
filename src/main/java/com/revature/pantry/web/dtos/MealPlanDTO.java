@@ -1,5 +1,6 @@
 package com.revature.pantry.web.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.models.auth.In;
 

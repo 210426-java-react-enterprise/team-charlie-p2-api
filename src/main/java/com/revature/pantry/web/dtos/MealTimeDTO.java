@@ -1,5 +1,6 @@
 package com.revature.pantry.web.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
@@ -15,6 +16,7 @@ public class MealTimeDTO {
     @NotNull
     @DateTimeFormat
     @JsonProperty("date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
     private LocalDate date;
     
     @NotNull
