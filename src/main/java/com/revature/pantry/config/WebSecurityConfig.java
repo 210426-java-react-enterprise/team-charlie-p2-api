@@ -15,8 +15,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().headers()
                 .frameOptions().sameOrigin();
-        
-        //Allow H2-Console to render X-Frame-Options
-        http.headers().frameOptions().sameOrigin();
     }
 }
