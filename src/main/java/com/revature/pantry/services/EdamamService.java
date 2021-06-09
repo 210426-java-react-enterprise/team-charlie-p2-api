@@ -28,7 +28,7 @@ public class EdamamService {
         this.restTemplate = restTemplate;
     }
 
-    public List<RecipeDto> getRecipesFromEdamam(@RequestParam String q){
+    public List<RecipeDTO> getRecipesFromEdamam(@RequestParam String q){
 
         String apiUrl = String.format("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, app_id, app_key);
         ResponseEntity<Response> edamamResponse = restTemplate.getForEntity(apiUrl, Response.class);
@@ -37,7 +37,7 @@ public class EdamamService {
         Response response = Objects.requireNonNull(edamamResponse.getBody());
 
         List<Hit> hits = response.getHits();
-        List<RecipeDto> recipes = new ArrayList<RecipeDto>();
+        List<RecipeDTO> recipes = new ArrayList<RecipeDTO>();
         hits.forEach((hit -> recipes.add(hit.getRecipe())));
 
         return recipes;

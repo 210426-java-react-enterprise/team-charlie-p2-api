@@ -3,6 +3,7 @@ package com.revature.pantry.models;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "meal_plans")
@@ -13,17 +14,14 @@ public class MealPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-// I moved to mealTime
-//    @Column(name = "meal_date")
-//    LocalDate date;
-    
-    //Add Many to Many
-
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
-
-
+    private int userId;
+    
+   @OneToMany(mappedBy = "meal-plan")
+    List<MealTime> mealTimes;
+   
+    
     public int getId() {
         return id;
     }
@@ -31,20 +29,21 @@ public class MealPlan {
     public void setId(int id) {
         this.id = id;
     }
-
-//    public LocalDate getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(LocalDate date) {
-//        this.date = date;
-//    }
-
-    public User getUser() {
-        return user;
+    
+    public int getUserId() {
+        return userId;
     }
-
-    public void setUser(User user) {
-        this.user = user;
+    
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
+    
+    public List<MealTime> getMealTimes() {
+        return mealTimes;
+    }
+    
+    public void setMealTimes(List<MealTime> mealTimes) {
+        this.mealTimes = mealTimes;
+    }
+    
 }

@@ -36,7 +36,7 @@ public class User {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    List<MealPlan> mealPlans;
+    MealPlan mealPlans;
 
     @Enumerated(value = EnumType.STRING)
     Role role;
@@ -61,10 +61,12 @@ public class User {
         this.role = role;
     }
 
-    public List<MealPlan> getMealPlans() {
+    public MealPlan getMealPlans() {
         return mealPlans;
     }
-
+    
+    public void setMealPlans(MealPlan mealPlans) { this.mealPlans = mealPlans; }
+    
     public int getId() {
         return id;
     }

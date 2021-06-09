@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.*;
 public class Hit {
 
     @JsonProperty("recipe")
-    private RecipeDto recipe;
+    private RecipeDTO recipe;
 
     @JsonProperty("bookmarked")
     private boolean bookmarked;
@@ -14,7 +14,7 @@ public class Hit {
     @JsonProperty("bought")
     private boolean bought;
 
-    public RecipeDto getRecipe() {
+    public RecipeDTO getRecipe() {
         return recipe;
     }
 

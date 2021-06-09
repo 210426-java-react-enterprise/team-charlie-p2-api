@@ -56,7 +56,7 @@ public class RecipeController {
 
   @GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
   @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
-  public List<RecipeDto> searchRecipes(@RequestParam String q){
+  public List<RecipeDTO> searchRecipes(@RequestParam String q){
     edamamService.isIngredientValid(q);
     return edamamService.getRecipesFromEdamam(q);    
   }

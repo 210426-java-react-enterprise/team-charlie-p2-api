@@ -27,6 +27,10 @@ public class MealTime {
     @JsonProperty("time")
     private String mealTime;
     
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="meal_plan_id")
+    private int mealPlanId;
+    
     @ManyToMany (cascade = {CascadeType.ALL})
     @JoinTable(
             name = "recipe_meal_times",

@@ -4,6 +4,9 @@ import com.revature.pantry.exceptions.MealDataIsInvalidException;
 import com.revature.pantry.exceptions.UserDataIsInvalidException;
 import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
+import com.revature.pantry.repos.MealPlanRepository;
+import com.revature.pantry.repos.MealTimeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -15,10 +18,27 @@ import java.util.regex.Pattern;
 @Service
 public class MealService {
 
-//    private MecipeRepository mealRepository;
-//
-//    @Autowired
-//    public RecipeService(MealRepository mealRepository){this.mealRepository = mealRepository;}
+    private MealPlanRepository mealPlanRepository;
+    private MealTimeRepository mealTimeRepository;
+
+    @Autowired
+    public MealService(MealPlanRepository mealPlanRepository, MealTimeRepository mealTimeRepository) {
+        this.mealPlanRepository = mealPlanRepository;
+        this.mealTimeRepository = mealTimeRepository;
+    }
+    
+    
+    public MealPlan save(MealPlan mealPlan){
+        isMealPlanValid(mealPlan);
+        return mealPlanRepository.save(mealPlan);
+        
+    }
+    
+    public void saveMealTime(MealTime mealTime){
+        isMealTimeValid(mealTime);
+        mealTimeRepository.save(mealTime);
+        
+    }
     
     
     /**
@@ -45,7 +65,7 @@ public class MealService {
         
             //USER
             // Not Null or empty
-            isNullOrEmpty("User", String.valueOf(mealPlan.getUser().getId()));
+            isNullOrEmpty("User", String.valueOf(mealPlan.getUserId()));
 
         
             
