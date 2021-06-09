@@ -48,50 +48,42 @@ public class UserService {
      * @return TRUE if data passed all the constraints
      * @throws UserDataIsInvalid - Return this exception if the User Data not satisfied the constraints
      */
+    @Deprecated
     private boolean isUserValid(User user) throws UserDataIsInvalid {
 
-        //User cannot be null
-        if (user == null) {
-            throw new UserDataIsInvalid("Please provide a not null object");
-        }
+        //USERNAME
+        //Not null or Empty
+        isNullOrEmpty("Username", user.getUsername());
+        //No more than 20 characters
+        isLengthValid("Username", 20, user.getUsername());
+        //Must starts with alphanumeric char & dot/hyphen/underscore doesn't appears consecutively & alphanumeric end
+        isPatternSatisfied("Username",
+                "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$",
+                user.getUsername(),
+                "It must start with an alphanumeric character; the following characters dot(.), hyphen(-), and underscore (_) cannot be consecutive; Finally alphanumeric character for ending.");
 
-        try {
-            //USERNAME
-            //Not null or Empty
-            isNullOrEmpty("Username", user.getUsername());
-            //No more than 20 characters
-            isLengthValid("Username", 20, user.getUsername());
-            //Must starts with alphanumeric char & dot/hyphen/underscore doesn't appears consecutively & alphanumeric end
-            isPatternSatisfied("Username",
-                    "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$",
-                    user.getUsername(),
-                    "It must start with an alphanumeric character; the following characters dot(.), hyphen(-), and underscore (_) cannot be consecutive; Finally alphanumeric character for ending.");
+        //PASSWORD
+        // Not Null or empty
+        isNullOrEmpty("Password", user.getPassword());
+        //No more than 255 characters
+        isLengthValid("Password", 255, user.getUsername());
+        //Must has a minimum of eight characters & at least one uppercase letter, one lowercase letter, one number and one special character
+        isPatternSatisfied("Password",
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+                user.getPassword(),
+                "Its must has a minimum of eight characters & at least one uppercase letter, one lowercase letter, one number and one special character");
 
-            //PASSWORD
-            // Not Null or empty
-            isNullOrEmpty("Password", user.getPassword());
-            //No more than 255 characters
-            isLengthValid("Password", 255, user.getUsername());
-            //Must has a minimum of eight characters & at least one uppercase letter, one lowercase letter, one number and one special character
-            isPatternSatisfied("Password",
-                    "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-                    user.getPassword(),
-                    "Its must has a minimum of eight characters & at least one uppercase letter, one lowercase letter, one number and one special character");
+        //EMAIL
+        // Not null or empty
+        isNullOrEmpty("Email", user.getEmail());
+        //No more than 255 characters
+        isLengthValid("Email", 255, user.getEmail());
+        //Minimum two character before @, must contains @ and the domain (Doesn't validate if the domain is valid)
+        isPatternSatisfied("Email",
+                "(?!.*\\.\\.)(^[^\\.][^@\\s]+@[^@\\s]+\\.[^@\\s\\.]+$)",
+                user.getEmail(),
+                "Must be a valid email address");
 
-            //EMAIL
-            // Not null or empty
-            isNullOrEmpty("Email", user.getEmail());
-            //No more than 255 characters
-            isLengthValid("Email", 255, user.getEmail());
-            //Minimum two character before @, must contains @ and the domain (Doesn't validate if the domain is valid)
-            isPatternSatisfied("Email",
-                    "(?!.*\\.\\.)(^[^\\.][^@\\s]+@[^@\\s]+\\.[^@\\s\\.]+$)",
-                    user.getEmail(),
-                    "Must be a valid email address");
-
-        } catch (UserDataIsInvalid e) {
-            throw e;
-        }
 
         //Return this if passed all the constraints
         return true;
