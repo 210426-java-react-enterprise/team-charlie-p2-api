@@ -9,6 +9,7 @@ import com.revature.pantry.web.dtos.Principal;
 import com.revature.pantry.web.dtos.RecipeDTO;
 import com.revature.pantry.web.dtos.UserDTO;
 import com.revature.pantry.web.security.Secured;
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class UserController {
     private UserRepository userRepository;
     private UserService userService;
     private final JwtUtil jwtUtil;
+
 
     @Autowired
     public UserController (UserRepository userRepository, UserService userService, JwtUtil jwtUtil) {
@@ -56,6 +58,13 @@ public class UserController {
     public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.addFavorite(recipeDTO, username);
+    }
+
+    @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO favoriteRecipes(@RequestBody @Valid List<RecipeDTO> recipeDTO, HttpServletRequest req) {
+        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
+        return userService.addFavorites(recipeDTO, username);
     }
 
     @DeleteMapping(value = "/favorite/{recipeId}")

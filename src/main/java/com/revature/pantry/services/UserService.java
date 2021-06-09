@@ -1,9 +1,8 @@
 package com.revature.pantry.services;
 
 
-import com.revature.pantry.exceptions.InvalidRequestException;
+import com.revature.pantry.exceptions.*;
 import com.revature.pantry.models.Recipe;
-import com.revature.pantry.exceptions.UserDataIsInvalid;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
@@ -34,6 +33,10 @@ public class UserService {
     }
 
     public User authenticate(String username, String password) {
+        User user = userRepository.findUserByUsernameAndPassword(username, password);
+        if(user == null){
+            throw new AuthenticationException("You inputted an invalid username or password!");
+        }
         return userRepository.findUserByUsernameAndPassword(username, password);
     }
 
@@ -186,8 +189,18 @@ public class UserService {
             userDTO.setUsername(user.getUsername());
             return userDTO;
         } else {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("Your request is invalid!");
         }
+    }
+
+    public UserDTO addFavorites(List<RecipeDTO> recipeDTO, String username) {
+        UserDTO savedFavoriteUser = null;
+        for (RecipeDTO recipe : recipeDTO) {
+            System.out.println(recipe);
+            savedFavoriteUser = addFavorite(recipe, username);
+        }
+
+        return savedFavoriteUser;
     }
 
     public boolean removeFavoriteRecipe(String username, int recipeId) {
