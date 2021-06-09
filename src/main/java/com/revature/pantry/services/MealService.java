@@ -54,20 +54,15 @@ public class MealService {
         if(mealPlan == null){throw new MealDataIsInvalidException("Please provide a not null object");}
     
         try{
-//            //DATE
-//            //Not null or Empty
-//            isNullOrEmpty("Date", String.valueOf(mealPlan.getDate()));
-//            //Must contains numeric characters
-//            isPatternSatisfied("Date",
-//                               "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$",
-//                               String.valueOf(mealPlan.getDate()),
-//                               "Not valid date format");
-        
+            
             //USER
             // Not Null or empty
-            isNullOrEmpty("User", String.valueOf(mealPlan.getUserId()));
-
-        
+            isNullOrEmpty("User", String.valueOf(mealPlan.getUser().getId()));
+            
+            //MEALTIMES
+            mealPlan.getMealTimes().forEach(mealTime -> {
+                isMealTimeValid(mealTime);
+            });
             
         
         }catch(MealDataIsInvalidException e){

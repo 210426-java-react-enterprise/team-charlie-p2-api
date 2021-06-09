@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MealTimeRepository extends JpaRepository <MealTime, Integer> {
-    
-    MealTime findMealTimeById(int mealTimeId);
+public interface MealTimeRepository extends JpaRepository<MealTime, Integer> {
+    //Check this with Team
+    //MealTime findMealTimeById(int mealTimeId);
     
 }

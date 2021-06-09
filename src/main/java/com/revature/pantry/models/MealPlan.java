@@ -12,30 +12,29 @@ public class MealPlan {
     @Id
     @Column(name = "meal_plan_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int mealPlanId;
     
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private int userId;
+    @OneToOne(mappedBy = "mealPlan")
+    @JoinColumn(name="user_id", referencedColumnName = "id")
+    private User user;
     
-   @OneToMany(mappedBy = "meal-plan")
+   @OneToMany(mappedBy = "mealPlan")
     List<MealTime> mealTimes;
    
     
     public int getId() {
-        return id;
+        return mealPlanId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int mealPlanId) {
+        this.mealPlanId = mealPlanId;
     }
     
-    public int getUserId() {
-        return userId;
+    public User getUser() { return user;
     }
     
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
     
     public List<MealTime> getMealTimes() {

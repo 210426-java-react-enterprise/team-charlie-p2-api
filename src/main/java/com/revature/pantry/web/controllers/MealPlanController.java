@@ -4,8 +4,10 @@ package com.revature.pantry.web.controllers;
 
 import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
+import com.revature.pantry.models.User;
 import com.revature.pantry.services.MealService;
 import com.revature.pantry.services.RecipeService;
+import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.MealPlanDTO;
 import com.revature.pantry.web.dtos.MealTimeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +31,26 @@ public class MealPlanController {
         
         private MealService mealService;
         private RecipeService recipeService;
+        private UserService userService;
         
         @Autowired
-        public MealPlanController(MealService mealservice, RecipeService recipeService) {
+        public MealPlanController(MealService mealservice, RecipeService recipeService, UserService userService) {
                 this.mealService = mealservice;
                 this.recipeService = recipeService;
+                this.userService = userService;
         }
         
         @GetMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
         public MealPlan savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
+                
                 MealPlan mealPlanToSave = new MealPlan();
                 List<MealTime> mealTimeList= new ArrayList<MealTime>();
                 
-                mealPlanToSave.setUserId(mealPlan.getUserId());
+                User user = userService.findUserById(mealPlan.getUserId());
+                mealPlanToSave.setUser(user);
+                
                 mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
-                        
+
                         Map<String, Integer> supportMap = mealTimeDTO.getDayPlan();
                         supportMap.forEach((time, recipeId)->{
                                 MealTime mealTime = new MealTime();
@@ -52,9 +59,8 @@ public class MealPlanController {
                                 mealTimeList.add(mealTime);
                                 });
                         });
-                mealPlanToSave.setUserId(mealPlan.getUserId());
-                mealPlanToSave.setMealTimes(mealTimeList);
                 
+                mealPlanToSave.setMealTimes(mealTimeList);
                 return  mealService.save(mealPlanToSave);
         }
 }

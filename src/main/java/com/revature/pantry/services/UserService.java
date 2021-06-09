@@ -39,6 +39,9 @@ public class UserService {
         return userRepository.findUserByUsernameAndPassword(username, password);
     }
     
+    public User findUserById(int userId){
+        return userRepository.findUserById(userId);
+    }
     
     /**
      * This method is responsible for validate the user data inputs against the app constraints

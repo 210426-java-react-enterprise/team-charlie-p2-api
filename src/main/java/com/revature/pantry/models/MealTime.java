@@ -14,7 +14,7 @@ public class MealTime {
     @Id
     @Column(name = "meal_time_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int mealTimeId;
     
     //Moved from MealPlan to here
     @NotNull
@@ -27,9 +27,10 @@ public class MealTime {
     @JsonProperty("time")
     private String mealTime;
     
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="meal_plan_id")
-    private int mealPlanId;
+    private MealPlan mealPlan;
     
     @ManyToMany (cascade = {CascadeType.ALL})
     @JoinTable(
@@ -40,11 +41,11 @@ public class MealTime {
     private List<Recipe> recipes;
 
     public int getId() {
-        return id;
+        return mealTimeId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int mealTimeId) {
+        this.mealTimeId = mealTimeId;
     }
 
     public String getMealTime() {

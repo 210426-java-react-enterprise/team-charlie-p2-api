@@ -34,9 +34,13 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    MealPlan mealPlans;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    MealPlan mealPlans;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meal_plan_id")
+    private MealPlan mealPlan;
 
     @Enumerated(value = EnumType.STRING)
     Role role;
@@ -61,11 +65,11 @@ public class User {
         this.role = role;
     }
 
-    public MealPlan getMealPlans() {
-        return mealPlans;
+    public MealPlan getMealPlan() {
+        return mealPlan;
     }
     
-    public void setMealPlans(MealPlan mealPlans) { this.mealPlans = mealPlans; }
+    public void setMealPlan(MealPlan mealPlan) { this.mealPlan = mealPlan; }
     
     public int getId() {
         return id;
