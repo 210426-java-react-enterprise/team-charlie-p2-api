@@ -12,8 +12,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //TODO sort out what requests to allow, allowing all for now
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/**")
-                .permitAll();
-
+                .permitAll()
+                .and().headers()
+                .frameOptions().sameOrigin();
+        
         //Allow H2-Console to render X-Frame-Options
         http.headers().frameOptions().sameOrigin();
     }
