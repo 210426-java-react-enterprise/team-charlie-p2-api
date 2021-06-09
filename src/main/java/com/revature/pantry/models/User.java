@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -21,16 +23,12 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
-    @NotNull
     @Column(unique = true, nullable = false)
     private String username;
 
-    @NotNull
     @Column(nullable = false)
     private String password;
 
-    @Email
-    @NotNull
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -41,15 +39,33 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     Role role;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserFavoriteRecipe> favorites;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private List<UserFavoriteRecipe> favorites;
 
-    public List<UserFavoriteRecipe> getFavorites() {
+    @ManyToMany (cascade = {CascadeType.ALL})
+    @JoinTable (
+            name = "user_favorite_recipe",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "recipe_id")}
+    )
+    private Set<Recipe> favorites = new HashSet<>();
+
+    public Set<Recipe> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(List<UserFavoriteRecipe> favorites) {
+    public void removeFavorite (Recipe recipe) {
+        this.favorites.remove(recipe);
+        recipe.getUsers().remove(this);
+    }
+
+    public void addFavorite(Recipe recipe) {
+        this.favorites.add(recipe);
+        recipe.getUsers().add(this);
+    }
+
+    public void setFavorites(Set<Recipe> favorites) {
         this.favorites = favorites;
     }
 
