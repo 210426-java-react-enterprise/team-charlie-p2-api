@@ -50,6 +50,7 @@ public class RecipeController {
 		return recipeService.saveAll(recipes);
 	}
 
+
 	@GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
 	@Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
 	public List<RecipeDTO> searchRecipes(@RequestParam String q){
