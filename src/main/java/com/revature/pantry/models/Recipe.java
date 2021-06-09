@@ -40,9 +40,13 @@ public class Recipe {
     @JsonProperty("image")
     private String image;
 
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
+//    private List<UserFavoriteRecipe> favorites;
+
+    @ManyToMany(mappedBy = "favorites")
     @JsonIgnore
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-    private List<UserFavoriteRecipe> favorites;
+    private Set<User> users = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(mappedBy = "recipes")
@@ -112,24 +116,29 @@ public class Recipe {
         this.url = url;
     }
 
-
-    public List<UserFavoriteRecipe> getFavorites() {
-        return favorites;
+    public String[] getIngredientLines() {
+        return ingredientLines;
     }
 
-    public void setFavorites(List<UserFavoriteRecipe> favorites) {
-        this.favorites = favorites;
+    public void setIngredientLines(String[] ingredientLines) {
+        this.ingredientLines = ingredientLines;
     }
 
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "id=" + id +
-                ", label='" + label + '\'' +
-                ", calories=" + calories +
-                ", yield='" + yield + '\'' +
-                ", url='" + url + '\'' +
-                ", image='" + image + '\'' +
-                '}';
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public void addUser(User user){
+        this.users.add(user);
+        user.getFavorites().add(this);
+    }
+
+    public void removeUser(User user) {
+        this.users.remove(user);
+        user.getFavorites().remove(this);
     }
 }

@@ -37,11 +37,14 @@ public class RecipeController {
 		return recipeService.findByUrl(url);
 	}
 
-	@PostMapping(value = "/save", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+
+	@Deprecated
+	@PostMapping(value = "/save/one", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public Recipe save(@RequestBody Recipe recipe) {
 		return recipeService.save(recipe);
 	}
 
+	@Deprecated
 	@PostMapping(value = "/save/all", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public List<Recipe> saveAll(@RequestBody List<Recipe> recipes) {
 		return recipeService.saveAll(recipes);

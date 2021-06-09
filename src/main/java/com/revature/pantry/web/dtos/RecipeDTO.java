@@ -7,19 +7,15 @@ import javax.validation.constraints.NotNull;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class RecipeDTO {
 
-        @JsonProperty("label")
+        @NotNull
         private String label;
-
-        @JsonProperty("calories")
+        @NotNull
         private int calories;
-
-        @JsonProperty("yield")
+        @NotNull
         private int yield;
-
-        @JsonProperty("url")
+        @NotNull
         private String url;
-
-        @JsonProperty("image")
+        @NotNull
         private String image;
 
         public RecipeDTO(){
@@ -46,15 +42,5 @@ import javax.validation.constraints.NotNull;
             return image;
         }
 
-        @Override
-        public String toString() {
-            return "RecipeDTO{" +
-                    "label='" + label + '\'' +
-                    ", calories=" + calories +
-                    ", yield=" + yield +
-                    ", url='" + url + '\'' +
-                    ", image='" + image + '\'' +
-                    '}';
-        }
     }
 
