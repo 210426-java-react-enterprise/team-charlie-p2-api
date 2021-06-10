@@ -1,9 +1,6 @@
 package com.revature.pantry.web.dtos;
 
 import com.fasterxml.jackson.annotation.*;
-import com.revature.pantry.models.*;
-
-import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Hit {

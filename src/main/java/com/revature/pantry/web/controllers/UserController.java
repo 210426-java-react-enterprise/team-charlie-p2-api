@@ -5,6 +5,8 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
+import com.revature.pantry.web.dtos.Credentials;
+import com.revature.pantry.web.dtos.Principal;
 import com.revature.pantry.web.dtos.RecipeDTO;
 import com.revature.pantry.web.dtos.NewUserDTO;
 import com.revature.pantry.web.dtos.UserDTO;
@@ -42,14 +44,21 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public User registerUser (@Valid @RequestBody NewUserDTO newUser) {
-        return userService.registerUser(newUser);
+    public void registerUser (@RequestBody NewUserDTO user) {
+        userService.registerUser(user);
     }
 
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
     @Secured(allowedRoles = {"ADMIN", "BASIC_USER"})
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
+        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
+        userService.removeUser(username, creds);
     }
 
     @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
