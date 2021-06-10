@@ -39,26 +39,22 @@ public class MealPlanController {
         }
         
         @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
-//        public void savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
-//                List<MealTime> mealTimeList = new ArrayList<>();
-//                User user = new User();
-//                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
-//                        MealTime mealTime = new MealTime();
-//                        mealTime.setDate(mealTimeDTO.getDate());
-//                        mealTime.setMealTime(mealTimeDTO.getTime());
-//                        mealTime.setRecipe(mealTimeDTO.getRecipe());
-//                        mealTimeList.add(mealTime);
-//                });
-//                user.setId(mealPlan.getUserId());
-//                user.setMealTimesList(mealTimeList);
-//                userService.saveMealPlan(user);
-//        }
-        public void savePlan(@RequestBody @Valid MealTime mealPlan) {
-        
+        public void savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
+                List<MealTime> mealTimeList = new ArrayList<>();
+                User user = new User();
+                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
+                        MealTime mealTime = new MealTime();
+                        mealTime.setDate(mealTimeDTO.getDate());
+                        mealTime.setMealTime(mealTimeDTO.getTime());
+                        mealTime.setRecipe(mealTimeDTO.getRecipe());
+                        mealTimeList.add(mealTime);
+                });
+                user.setId(mealPlan.getUserId());
+                user.setMealTimesList(mealTimeList);
+                userService.saveMealPlan(user);
         }
+       
         
-        
-
         //V3
         @GetMapping(value = "/find", produces = APPLICATION_JSON_VALUE)
         public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
