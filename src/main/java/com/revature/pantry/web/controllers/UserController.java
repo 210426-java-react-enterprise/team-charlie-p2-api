@@ -54,7 +54,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @DeleteMapping(value = "/deactivation", consumes = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
