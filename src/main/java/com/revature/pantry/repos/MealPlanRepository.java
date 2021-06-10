@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MealPlanRepository extends JpaRepository<MealPlan, Integer> {
     
-    MealPlan findMealPlanByUserId(int userId);
+    MealPlan findMealPlanByUserId(int id);
     
 }

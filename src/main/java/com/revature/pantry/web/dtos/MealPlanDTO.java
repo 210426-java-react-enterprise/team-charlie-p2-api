@@ -16,7 +16,6 @@ public class MealPlanDTO {
     @JsonProperty("user-id")
     private int userId;
     
-    @NotNull
     @JsonProperty("day-plan-list")
     private List<MealTimeDTO> dayPlanList;
     
@@ -35,4 +34,9 @@ public class MealPlanDTO {
     public void setDayPlanList(List<MealTimeDTO> dayPlanList) {
         this.dayPlanList = dayPlanList;
     }
+
+    public void addToDayPlan(MealTimeDTO mealTimeDTO){
+        dayPlanList.add(mealTimeDTO);
+    }
+    
 }

@@ -4,6 +4,7 @@ import com.revature.pantry.exceptions.MealDataIsInvalidException;
 import com.revature.pantry.exceptions.UserDataIsInvalidException;
 import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
+import com.revature.pantry.models.User;
 import com.revature.pantry.repos.MealPlanRepository;
 import com.revature.pantry.repos.MealTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,10 @@ public class MealService {
         isMealTimeValid(mealTime);
         mealTimeRepository.save(mealTime);
         
+    }
+    
+    public MealPlan findMealPlanByUserId(User user){
+        return mealPlanRepository.findMealPlanByUserId(user.getId());
     }
     
     

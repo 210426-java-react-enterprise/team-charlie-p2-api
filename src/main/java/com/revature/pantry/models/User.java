@@ -71,13 +71,10 @@ public class User {
     
     public void setMealPlan(MealPlan mealPlan) { this.mealPlan = mealPlan; }
     
-    public int getId() {
-        return id;
+    public int getId() { return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
     public String getUsername() {
         return username;

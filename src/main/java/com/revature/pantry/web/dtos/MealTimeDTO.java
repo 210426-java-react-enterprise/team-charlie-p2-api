@@ -2,6 +2,7 @@ package com.revature.pantry.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -39,6 +40,10 @@ public class MealTimeDTO {
     
     public void setDayPlan(Map<String, Integer> dayPlan) {
         this.dayPlan = dayPlan;
+    }
+    
+    public void addToDayPlan(String time, int recipeId){
+        dayPlan.put(time, recipeId);
     }
     
     @Override

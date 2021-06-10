@@ -1,5 +1,7 @@
 package com.revature.pantry.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
@@ -16,6 +18,7 @@ public class MealPlan {
     
     @OneToOne(mappedBy = "mealPlan")
     @JoinColumn(name="user_id", referencedColumnName = "id")
+    @JsonIgnore()
     private User user;
     
    @OneToMany(mappedBy = "mealPlan")
