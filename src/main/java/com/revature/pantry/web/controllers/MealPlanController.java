@@ -69,10 +69,10 @@ public class MealPlanController {
                 mealPlan.getMealTimes().forEach(mealTime -> {
                         MealTimeDTO mealTimeDTO = new MealTimeDTO();
                         mealTimeDTO.setDate(mealTime.getDate());
-                        mealTimeDTO.addToDayPlan(mealTime.getMealTime(),mealtime.g);
+                        //mealTimeDTO.addToDayPlan(mealTime.getMealTime(),mealtime.g);
                         //mealPlanDTO.addToDayPlan(mealTime);
                 });
                 
-                return );
+                return mealPlanDTO;
         }
 }
