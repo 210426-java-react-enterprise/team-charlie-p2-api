@@ -18,7 +18,6 @@ public class MealTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mealTimeId;
     
-    //Moved from MealPlan to here
     @NotNull
     @Column(name = "meal_date")
     @JsonProperty("date")
@@ -39,14 +38,19 @@ public class MealTime {
     @ManyToMany(mappedBy = "mealTimeList")
     @JsonIgnore
     List<User> userList = new ArrayList<>();
+//V2
+//    @ManyToMany (cascade = {CascadeType.ALL})
+//    @JoinTable(
+//            name = "recipe_meal_times",
+//            joinColumns = {@JoinColumn(name = "meal_time_id")},
+//            inverseJoinColumns = {@JoinColumn(name="recipe_id")}
+//    )
+//    private List<Recipe> recipes;
     
-    @ManyToMany (cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "recipe_meal_times",
-            joinColumns = {@JoinColumn(name = "meal_time_id")},
-            inverseJoinColumns = {@JoinColumn(name="recipe_id")}
-    )
-    private List<Recipe> recipes;
+  
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
     
     public int getMealTimeId() { return mealTimeId; }
     
@@ -85,22 +89,31 @@ public class MealTime {
         this.userList.remove(user);
         user.getMealTimesList().remove(this);
     }
+//V2
+//    public List<Recipe> getRecipes() {
+//        return recipes;
+//    }
+//
+//    public void setRecipes(List<Recipe> recipes) {
+//        this.recipes = recipes;
+//    }
+//
+//    public void addRecipe(Recipe recipe){
+//        this.recipes.add(recipe);
+//        recipe.getMealTimes().add(this);
+//    }
+//
+//    public void removeRecipe(Recipe recipe){
+//        this.recipes.remove(recipe);
+//        recipe.getMealTimes().remove(this);
+//    }
     
-    public List<Recipe> getRecipes() {
-        return recipes;
+    //V3
+    public Recipe getRecipe() {
+        return recipe;
     }
     
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
-    }
-    
-    public void addRecipe(Recipe recipe){
-        this.recipes.add(recipe);
-        recipe.getMealTimes().add(this);
-    }
-    
-    public void removeRecipe(Recipe recipe){
-        this.recipes.remove(recipe);
-        recipe.getMealTimes().remove(this);
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

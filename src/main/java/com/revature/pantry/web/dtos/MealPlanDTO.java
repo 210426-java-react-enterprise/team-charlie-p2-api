@@ -21,7 +21,11 @@ public class MealPlanDTO {
 //    private List<MealTimeDTO> dayPlanList;
     
     //V3
-    private List<MealTime> dayPlanList;
+    @NotNull
+    @JsonProperty("day-plan-list")
+    private List<MealTimeDTO> dayPlanList;
+    
+    
     public int getUserId() {
         return userId;
     }
@@ -45,12 +49,19 @@ public class MealPlanDTO {
 //    }
     
     //V3
-    public List<MealTime> getDayPlanList() {
+    public List<MealTimeDTO> getDayPlanList() {
         return dayPlanList;
     }
     
-    public void setDayPlanList(List<MealTime> dayPlanList) {
+    public void setDayPlanList(List<MealTimeDTO> dayPlanList) {
         this.dayPlanList = dayPlanList;
     }
     
+    public void addDayPlan(MealTimeDTO mealTimeDTO){
+        dayPlanList.add(mealTimeDTO);
+    }
+    
+    public void removeDayPlan(MealTimeDTO mealTimeDTO){
+        dayPlanList.remove(mealTimeDTO);
+    }
 }

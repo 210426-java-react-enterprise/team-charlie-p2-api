@@ -44,10 +44,17 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<UserFavoriteRecipe> favorites;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "recipes")
-    private List<MealTime> mealTimes;
+    //V2
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "recipes")
+//    private List<MealTime> mealTimes;
 
+    //V3
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe")
+    private List<MealTime> mealTimeList;
+    
+    @JsonIgnore
     @Column(name = "ingredient_lines")
     private String[] ingredientLines;
 
@@ -63,12 +70,22 @@ public class Recipe {
         this.image = image;
     }
 
-    public List<MealTime> getMealTimes() {
-        return mealTimes;
+    //V2
+//    public List<MealTime> getMealTimes() {
+//        return mealTimes;
+//    }
+//
+//    public void setMealTimes(List<MealTime> mealTimes) {
+//        this.mealTimes = mealTimes;
+//    }
+    
+    //V3
+    public List<MealTime> getMealTimeList() {
+        return mealTimeList;
     }
-
-    public void setMealTimes(List<MealTime> mealTimes) {
-        this.mealTimes = mealTimes;
+    
+    public void setMealTimeList(List<MealTime> mealTimeList) {
+        this.mealTimeList = mealTimeList;
     }
     
     public int getId() {
@@ -119,16 +136,17 @@ public class Recipe {
     public void setFavorites(List<UserFavoriteRecipe> favorites) {
         this.favorites = favorites;
     }
-    
-    public void addMealTime(MealTime mealTime){
-        this.mealTimes.add(mealTime);
-        mealTime.addRecipe(this);
-    }
-    
-    public void removeMealTime(MealTime mealTime){
-        this.mealTimes.remove(mealTime);
-        mealTime.removeRecipe(this);
-    }
+
+//V2
+//    public void addMealTime(MealTime mealTime){
+//        this.mealTimes.add(mealTime);
+//        mealTime.addRecipe(this);
+//    }
+//
+//    public void removeMealTime(MealTime mealTime){
+//        this.mealTimes.remove(mealTime);
+//        mealTime.removeRecipe(this);
+//    }
     
     @Override
     public String toString() {

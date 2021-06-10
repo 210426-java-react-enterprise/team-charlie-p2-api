@@ -38,53 +38,44 @@ public class MealPlanController {
                 this.userService = userService;
         }
         
-//        @PostMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-//        public MealPlan savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
-//
-//                MealPlan mealPlanToSave = new MealPlan();
-//                List<MealTime> mealTimeList= new ArrayList<MealTime>();
-//
-//                User user = userService.findUserById(mealPlan.getUserId());
-//                mealPlanToSave.setUser(user);
-//
+        @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
+//        public void savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
+//                List<MealTime> mealTimeList = new ArrayList<>();
+//                User user = new User();
 //                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
-//                        Map<String, Integer> supportMap = mealTimeDTO.getDayPlan();
-//                        supportMap.forEach((time, recipeId)->{
-//                                MealTime mealTime = new MealTime();
-//                                mealTime.setDate(mealTimeDTO.getDate());
-//                                mealTime.setMealTime(String.valueOf(time));
-//                                mealTimeList.add(mealTime);
-//                                });
-//                        });
-//
-//                mealPlanToSave.setMealTimes(mealTimeList);
-//                return  mealService.save(mealPlanToSave);
-//        }
-        
-        @GetMapping(value = "/find/id", produces = APPLICATION_JSON_VALUE)
-//V2
-//        public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
-//                User user = userService.findUserById(userId);
-//                MealPlan mealPlan = mealService.findMealPlanByUserId(user);
-//                MealPlanDTO mealPlanDTO = new MealPlanDTO();
-//                mealPlanDTO.setUserId(user.getId());
-//                mealPlan.getMealTimes().forEach(mealTime -> {
-//                        MealTimeDTO mealTimeDTO = new MealTimeDTO();
-//                        mealTimeDTO.setDate(mealTime.getDate());
-//                        //mealTimeDTO.addToDayPlan(mealTime.getMealTime(),mealtime.g);
-//                        //mealPlanDTO.addToDayPlan(mealTime);
+//                        MealTime mealTime = new MealTime();
+//                        mealTime.setDate(mealTimeDTO.getDate());
+//                        mealTime.setMealTime(mealTimeDTO.getTime());
+//                        mealTime.setRecipe(mealTimeDTO.getRecipe());
+//                        mealTimeList.add(mealTime);
 //                });
-//
-//                return mealPlanDTO;
+//                user.setId(mealPlan.getUserId());
+//                user.setMealTimesList(mealTimeList);
+//                userService.saveMealPlan(user);
 //        }
+        public void savePlan(@RequestBody @Valid MealTime mealPlan) {
+        
+        }
+        
+        
 
         //V3
-                public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
-                MealPlanDTO mealPlanDTO = new MealPlanDTO();
-                User user = userService.findUserById(userId);
-                mealPlanDTO.setUserId(user.getId());
-                mealPlanDTO.setDayPlanList(user.getMealTimesList());
-                return mealPlanDTO;
+        @GetMapping(value = "/find", produces = APPLICATION_JSON_VALUE)
+        public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
+        MealPlanDTO mealPlanDTO = new MealPlanDTO();
+        User user = userService.findUserById(userId);
+        mealPlanDTO.setUserId(user.getId());
+        List<MealTimeDTO> mealTimeList = new ArrayList<>();
+        user.getMealTimesList().stream().forEach(mealTime -> {
+                MealTimeDTO mealTimeDTO = new MealTimeDTO();
+                mealTimeDTO.setDate(mealTime.getDate());
+                mealTimeDTO.setTime(mealTime.getMealTime());
+                mealTimeDTO.setRecipe(mealTime.getRecipe());
+                mealTimeList.add(mealTimeDTO);
+        });
+        //mealPlanDTO.setDayPlanList(user.getMealTimesList());
+        mealPlanDTO.setDayPlanList(mealTimeList);
+        return mealPlanDTO;
         }
         
 }

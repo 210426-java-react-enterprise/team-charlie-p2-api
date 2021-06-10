@@ -199,5 +199,9 @@ public class UserService {
         noLongerFavorite.setFavorite(false);
         favoriteRecipeRepository.save(noLongerFavorite);
     }
+    
+    public void saveMealPlan(User user){
+        userRepository.save(user);
+    }
 }
 
