@@ -61,18 +61,37 @@ public class MealPlanController {
         }
         
         @GetMapping(value = "/find/id", produces = APPLICATION_JSON_VALUE)
-        public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
+//V2
+//        public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
+//                User user = userService.findUserById(userId);
+//                MealPlan mealPlan = mealService.findMealPlanByUserId(user);
+//                MealPlanDTO mealPlanDTO = new MealPlanDTO();
+//                mealPlanDTO.setUserId(user.getId());
+//                mealPlan.getMealTimes().forEach(mealTime -> {
+//                        MealTimeDTO mealTimeDTO = new MealTimeDTO();
+//                        mealTimeDTO.setDate(mealTime.getDate());
+//                        //mealTimeDTO.addToDayPlan(mealTime.getMealTime(),mealtime.g);
+//                        //mealPlanDTO.addToDayPlan(mealTime);
+//                });
+//
+//                return mealPlanDTO;
+//        }
+
+        //V3
+                public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
                 User user = userService.findUserById(userId);
-                MealPlan mealPlan = mealService.findMealPlanByUserId(user);
+                MealTime mealTime = mealService.findMealTimeByUserId(user);
                 MealPlanDTO mealPlanDTO = new MealPlanDTO();
                 mealPlanDTO.setUserId(user.getId());
-                mealPlan.getMealTimes().forEach(mealTime -> {
+                
+                mealtime.getMealTimes().forEach(mealTime -> {
                         MealTimeDTO mealTimeDTO = new MealTimeDTO();
                         mealTimeDTO.setDate(mealTime.getDate());
                         //mealTimeDTO.addToDayPlan(mealTime.getMealTime(),mealtime.g);
                         //mealPlanDTO.addToDayPlan(mealTime);
                 });
-                
+
                 return mealPlanDTO;
         }
+        
 }

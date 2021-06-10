@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MealTimeRepository extends JpaRepository<MealTime, Integer> {
-    //Check this with Team
-    //MealTime findMealTimeById(int mealTimeId);
+    
+    MealTime findMealTimeById(int id);
     
 }

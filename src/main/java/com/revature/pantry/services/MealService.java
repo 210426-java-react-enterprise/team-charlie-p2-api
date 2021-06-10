@@ -40,11 +40,15 @@ public class MealService {
         mealTimeRepository.save(mealTime);
         
     }
-    
+
+    //V2
     public MealPlan findMealPlanByUserId(User user){
         return mealPlanRepository.findMealPlanByUserId(user.getId());
     }
-    
+
+    public MealTime findMealTimeByUserId(User user){
+        return mealTimeRepository.findMealTimeById(user.getId());
+    }
     
     /**
      * This method is responsible for validate the meal plan data inputs against the app constraints

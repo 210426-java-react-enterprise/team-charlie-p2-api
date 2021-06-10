@@ -70,8 +70,7 @@ public class Recipe {
     public void setMealTimes(List<MealTime> mealTimes) {
         this.mealTimes = mealTimes;
     }
-
-
+    
     public int getId() {
         return id;
     }
@@ -120,7 +119,17 @@ public class Recipe {
     public void setFavorites(List<UserFavoriteRecipe> favorites) {
         this.favorites = favorites;
     }
-
+    
+    public void addMealTime(MealTime mealTime){
+        this.mealTimes.add(mealTime);
+        mealTime.addRecipe(this);
+    }
+    
+    public void removeMealTime(MealTime mealTime){
+        this.mealTimes.remove(mealTime);
+        mealTime.removeRecipe(this);
+    }
+    
     @Override
     public String toString() {
         return "Recipe{" +

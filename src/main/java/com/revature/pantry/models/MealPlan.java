@@ -6,22 +6,26 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-
-@Entity
-@Table(name = "meal_plans")
+//V2
+//@Entity
+//@Table(name = "meal_plans")
 public class MealPlan {
 
-    @Id
-    @Column(name = "meal_plan_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//V2
+//
+//    @Id
+//    @Column(name = "meal_plan_id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mealPlanId;
-    
-    @OneToOne(mappedBy = "mealPlan")
-    @JoinColumn(name="user_id", referencedColumnName = "id")
-    @JsonIgnore()
+
+//V2
+//    @OneToOne(mappedBy = "mealPlan")
+//    @JoinColumn(name="user_id", referencedColumnName = "id")
+//    @JsonIgnore()
     private User user;
     
-   @OneToMany(mappedBy = "mealPlan")
+//V2
+//   @OneToMany(mappedBy = "mealPlan")
     List<MealTime> mealTimes;
    
     
