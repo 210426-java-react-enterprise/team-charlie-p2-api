@@ -5,11 +5,10 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
-import com.revature.pantry.web.dtos.Principal;
 import com.revature.pantry.web.dtos.RecipeDTO;
+import com.revature.pantry.web.dtos.NewUserDTO;
 import com.revature.pantry.web.dtos.UserDTO;
 import com.revature.pantry.web.security.Secured;
-import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -43,8 +42,8 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public User registerUser (@RequestBody User user) {
-        return userService.registerUser(user);
+    public User registerUser (@Valid @RequestBody NewUserDTO newUser) {
+        return userService.registerUser(newUser);
     }
 
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
@@ -58,6 +57,13 @@ public class UserController {
     public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.addFavorite(recipeDTO, username);
+    }
+
+    @PatchMapping(value = "/favorite/{id}", produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO addExistingFavorite(@PathVariable int id, HttpServletRequest req) {
+        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
+        return userService.addFavorite(id, username);
     }
 
     @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)

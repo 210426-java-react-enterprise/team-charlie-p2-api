@@ -44,7 +44,7 @@ public class Recipe {
 //    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
 //    private List<UserFavoriteRecipe> favorites;
 
-    @ManyToMany(mappedBy = "favorites")
+    @ManyToMany(mappedBy = "favorites") //field name of relation owner
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 

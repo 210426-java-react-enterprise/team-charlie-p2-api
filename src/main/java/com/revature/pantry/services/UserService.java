@@ -7,13 +7,13 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.web.dtos.RecipeDTO;
+import com.revature.pantry.web.dtos.NewUserDTO;
 import com.revature.pantry.web.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -146,10 +146,10 @@ public class UserService {
         if (!eval.test(strToEval, inputPattern)) {
             throw new UserDataIsInvalid(field + ": " + exceptionMessage);
         }
-        ;
     }
 
-    public User registerUser(User user) {
+    public User registerUser(NewUserDTO newUser) {
+        User user = new User(newUser.getUsername(), newUser.getPassword(), newUser.getEmail());
         user.setRole(User.Role.BASIC_USER);
         return userRepository.save(user);
     }
@@ -182,6 +182,27 @@ public class UserService {
             return userDTO;
         } else {
             throw new InvalidRequestException("Your request is invalid!");
+        }
+    }
+
+    public UserDTO addFavorite(int recipeId, String username) {
+        Optional<Recipe> _recipe = recipeRepository.findById(recipeId);
+        Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
+        UserDTO result = new UserDTO();
+
+        if (_user.isPresent() && _recipe.isPresent()) {
+            User user = _user.get();
+            Recipe recipe = _recipe.get();
+
+            user.addFavorite(recipe);
+            recipe.addUser(user);
+            userRepository.save(user);
+            recipeRepository.save(recipe);
+            result.setUsername(username);
+            result.setFavorites(user.getFavorites());
+            return result;
+        } else {
+            throw new InvalidRequestException();
         }
     }
 
