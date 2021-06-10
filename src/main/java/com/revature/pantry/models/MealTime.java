@@ -48,7 +48,7 @@ public class MealTime {
 //    private List<Recipe> recipes;
     
   
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
     

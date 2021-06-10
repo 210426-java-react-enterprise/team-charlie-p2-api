@@ -41,9 +41,9 @@ public class MealService {
 //
 //    }
     
-    public void saveMealTime(MealTime mealTime){
+    public MealTime saveMealTime(MealTime mealTime){
         isMealTimeValid(mealTime);
-        mealTimeRepository.save(mealTime);
+        return mealTimeRepository.save(mealTime);
         
     }
 
@@ -131,7 +131,7 @@ public class MealService {
             isNullOrEmpty("Date", String.valueOf(mealTime.getDate()));
             //Must contains numeric characters
             isPatternSatisfied("Date",
-                               "^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$",
+                               "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$",
                                String.valueOf(mealTime.getDate()),
                                "Not valid date format");
             //MEAL TIME

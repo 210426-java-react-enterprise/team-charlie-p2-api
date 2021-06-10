@@ -41,16 +41,14 @@ public class MealPlanController {
         @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
         public void savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
                 List<MealTime> mealTimeList = new ArrayList<>();
-                User user = new User();
-                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
+                User user = userService.findUserById(mealPlan.getUserId());
+                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> { ;
                         MealTime mealTime = new MealTime();
                         mealTime.setDate(mealTimeDTO.getDate());
                         mealTime.setMealTime(mealTimeDTO.getTime());
                         mealTime.setRecipe(mealTimeDTO.getRecipe());
-                        mealTimeList.add(mealTime);
+                        user.getMealTimesList().add(mealService.saveMealTime(mealTime));
                 });
-                user.setId(mealPlan.getUserId());
-                user.setMealTimesList(mealTimeList);
                 userService.saveMealPlan(user);
         }
        
@@ -73,5 +71,4 @@ public class MealPlanController {
         mealPlanDTO.setDayPlanList(mealTimeList);
         return mealPlanDTO;
         }
-        
 }
