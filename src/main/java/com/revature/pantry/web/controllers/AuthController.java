@@ -4,6 +4,7 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.Credentials;
+import com.revature.pantry.web.dtos.UserDTO;
 import com.revature.pantry.web.security.JwtConfig;
 import com.revature.pantry.web.security.TokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,11 @@ public class AuthController {
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public User authenticate(@RequestBody Credentials credentials, HttpServletResponse response) {
+    public UserDTO authenticate(@RequestBody Credentials credentials, HttpServletResponse response) {
         User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
         String jwt = tokenGenerator.createJwt(user);
         response.setHeader(jwtConfig.getHeader(), jwt);
-        return user;
+        return new UserDTO(user.getUsername(), user.getFavorites(), user.getMealTimesList());
     }
 
 }
