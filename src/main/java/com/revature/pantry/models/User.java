@@ -88,13 +88,14 @@ public class User {
     }
     
     public void addMealTimeToList(MealTime mealTime){
-        mealTimeList.add(mealTime);
-        //
+        this.mealTimeList.add(mealTime);
+        mealTime.getUserList().add(this);
+        
     }
     
     public void removeMealTimeToList(MealTime mealTime){
-        mealTimeList.remove(mealTime);
-        //
+        this.mealTimeList.remove(mealTime);
+        mealTime.getUserList().remove(this);
     }
     
     public int getId() { return id;

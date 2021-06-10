@@ -2,14 +2,17 @@ package com.revature.pantry.services;
 
 import com.revature.pantry.exceptions.MealDataIsInvalidException;
 import com.revature.pantry.exceptions.UserDataIsInvalidException;
-import com.revature.pantry.models.MealPlan;
+//import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
 import com.revature.pantry.models.User;
-import com.revature.pantry.repos.MealPlanRepository;
+//import com.revature.pantry.repos.MealPlanRepository;
 import com.revature.pantry.repos.MealTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -19,21 +22,24 @@ import java.util.regex.Pattern;
 @Service
 public class MealService {
 
-    private MealPlanRepository mealPlanRepository;
+//    private MealPlanRepository mealPlanRepository;
     private MealTimeRepository mealTimeRepository;
 
     @Autowired
-    public MealService(MealPlanRepository mealPlanRepository, MealTimeRepository mealTimeRepository) {
-        this.mealPlanRepository = mealPlanRepository;
-        this.mealTimeRepository = mealTimeRepository;
+//    public MealService(MealPlanRepository mealPlanRepository, MealTimeRepository mealTimeRepository) {
+//        this.mealPlanRepository = mealPlanRepository;
+//        this.mealTimeRepository = mealTimeRepository;
+//    }
+
+    public MealService(MealTimeRepository mealTimeRepository){
+        this.mealTimeRepository=mealTimeRepository;
     }
     
-    
-    public MealPlan save(MealPlan mealPlan){
-        isMealPlanValid(mealPlan);
-        return mealPlanRepository.save(mealPlan);
-        
-    }
+//    public MealPlan save(MealPlan mealPlan){
+//        isMealPlanValid(mealPlan);
+//        return mealPlanRepository.save(mealPlan);
+//
+//    }
     
     public void saveMealTime(MealTime mealTime){
         isMealTimeValid(mealTime);
@@ -41,13 +47,22 @@ public class MealService {
         
     }
 
-    //V2
-    public MealPlan findMealPlanByUserId(User user){
-        return mealPlanRepository.findMealPlanByUserId(user.getId());
-    }
+//    //V2
+//    public MealPlan findMealPlanByUserId(User user){
+//        return mealPlanRepository.findMealPlanByUserId(user.getId());
+//    }
 
-    public MealTime findMealTimeByUserId(User user){
-        return mealTimeRepository.findMealTimeById(user.getId());
+    //V3
+    public List<MealTime> findMealTimesByDateAndUser(LocalDate date, User inputUser){
+        return inputUser.getMealTimesList();
+        
+//        List<MealTime> mealTimesByDate =mealTimeRepository.findMealTimesByDate(date);
+//        mealTimesByDate.stream().filter(mealTime -> mealTime.getUserList().stream().filter(user -> user.getId() == inputUser.getId()) {
+//
+//        });
+//
+//
+//        return ;
     }
     
     /**
@@ -56,32 +71,32 @@ public class MealService {
      * @return TRUE if data passed all the constraints / FALSE if not passed the constrains
      */
     
-    public boolean isMealPlanValid(MealPlan mealPlan) throws MealDataIsInvalidException {
-        
-        
-        //mealPlan cannot be null
-        if(mealPlan == null){throw new MealDataIsInvalidException("Please provide a not null object");}
-    
-        try{
-            
-            //USER
-            // Not Null or empty
-            isNullOrEmpty("User", String.valueOf(mealPlan.getUser().getId()));
-            
-            //MEALTIMES
-            mealPlan.getMealTimes().forEach(mealTime -> {
-                isMealTimeValid(mealTime);
-            });
-            
-        
-        }catch(MealDataIsInvalidException e){
-            throw e;
-        }
-    
-        //Return this if passed all the constraints
-        return true;
-        
-    }
+//    public boolean isMealPlanValid(MealPlan mealPlan) throws MealDataIsInvalidException {
+//
+//
+//        //mealPlan cannot be null
+//        if(mealPlan == null){throw new MealDataIsInvalidException("Please provide a not null object");}
+//
+//        try{
+//
+//            //USER
+//            // Not Null or empty
+//            isNullOrEmpty("User", String.valueOf(mealPlan.getUser().getId()));
+//
+//            //MEALTIMES
+//            mealPlan.getMealTimes().forEach(mealTime -> {
+//                isMealTimeValid(mealTime);
+//            });
+//
+//
+//        }catch(MealDataIsInvalidException e){
+//            throw e;
+//        }
+//
+//        //Return this if passed all the constraints
+//        return true;
+//
+//    }
     
     
     /**
