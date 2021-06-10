@@ -21,82 +21,27 @@ import java.util.regex.Pattern;
 
 @Service
 public class MealService {
-
-//    private MealPlanRepository mealPlanRepository;
+    
     private MealTimeRepository mealTimeRepository;
 
     @Autowired
-//    public MealService(MealPlanRepository mealPlanRepository, MealTimeRepository mealTimeRepository) {
-//        this.mealPlanRepository = mealPlanRepository;
-//        this.mealTimeRepository = mealTimeRepository;
-//    }
-
     public MealService(MealTimeRepository mealTimeRepository){
         this.mealTimeRepository=mealTimeRepository;
     }
     
-//    public MealPlan save(MealPlan mealPlan){
-//        isMealPlanValid(mealPlan);
-//        return mealPlanRepository.save(mealPlan);
-//
-//    }
-    
+
     public MealTime saveMealTime(MealTime mealTime){
         isMealTimeValid(mealTime);
         return mealTimeRepository.save(mealTime);
         
     }
-
-//    //V2
-//    public MealPlan findMealPlanByUserId(User user){
-//        return mealPlanRepository.findMealPlanByUserId(user.getId());
-//    }
+    
 
     //V3
     public List<MealTime> findMealTimesByDateAndUser(LocalDate date, User inputUser){
         return inputUser.getMealTimesList();
         
-//        List<MealTime> mealTimesByDate =mealTimeRepository.findMealTimesByDate(date);
-//        mealTimesByDate.stream().filter(mealTime -> mealTime.getUserList().stream().filter(user -> user.getId() == inputUser.getId()) {
-//
-//        });
-//
-//
-//        return ;
     }
-    
-    /**
-     * This method is responsible for validate the meal plan data inputs against the app constraints
-     * @param mealPlan - meal plan data to be audit
-     * @return TRUE if data passed all the constraints / FALSE if not passed the constrains
-     */
-    
-//    public boolean isMealPlanValid(MealPlan mealPlan) throws MealDataIsInvalidException {
-//
-//
-//        //mealPlan cannot be null
-//        if(mealPlan == null){throw new MealDataIsInvalidException("Please provide a not null object");}
-//
-//        try{
-//
-//            //USER
-//            // Not Null or empty
-//            isNullOrEmpty("User", String.valueOf(mealPlan.getUser().getId()));
-//
-//            //MEALTIMES
-//            mealPlan.getMealTimes().forEach(mealTime -> {
-//                isMealTimeValid(mealTime);
-//            });
-//
-//
-//        }catch(MealDataIsInvalidException e){
-//            throw e;
-//        }
-//
-//        //Return this if passed all the constraints
-//        return true;
-//
-//    }
     
     
     /**

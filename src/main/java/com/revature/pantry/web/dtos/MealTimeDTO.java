@@ -25,11 +25,6 @@ public class MealTimeDTO {
     @JsonProperty("time")
     @JsonFormat(shape =  JsonFormat.Shape.STRING)
     private String time;
-
-//V2
-//    @NotNull
-//    @JsonProperty("day-plan")
-//    private Map<String, Integer> dayPlan;
     
     @NotNull
     @JsonProperty("recipe")
@@ -47,18 +42,6 @@ public class MealTimeDTO {
         this.date = date;
     }
     
-//    public Map<String, Integer> getDayPlan() {
-//        return dayPlan;
-//    }
-//
-//    public void setDayPlan(Map<String, Integer> dayPlan) {
-//        this.dayPlan = dayPlan;
-//    }
-//
-//    public void addToDayPlan(String time, int recipeId){
-//        dayPlan.put(time, recipeId);
-//    }
-    
     //V3
     public String getTime() {
         return time;
@@ -75,14 +58,6 @@ public class MealTimeDTO {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
-//V2
-//    @Override
-//    public String toString() {
-//        return "MealTimeDTO{" +
-//                "date=" + date +
-//                ", dayPlan=" + dayPlan +
-//                '}';
-//    }
     
     //V3
     @Override

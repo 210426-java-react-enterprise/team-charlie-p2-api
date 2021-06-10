@@ -67,7 +67,7 @@ public class MealPlanController {
                 mealTimeDTO.setRecipe(mealTime.getRecipe());
                 mealTimeList.add(mealTimeDTO);
         });
-        //mealPlanDTO.setDayPlanList(user.getMealTimesList());
+        
         mealPlanDTO.setDayPlanList(mealTimeList);
         return mealPlanDTO;
         }
