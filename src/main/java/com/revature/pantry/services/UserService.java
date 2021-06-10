@@ -6,6 +6,7 @@ import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
+import com.revature.pantry.web.dtos.Credentials;
 import com.revature.pantry.web.dtos.RecipeDTO;
 import com.revature.pantry.web.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +153,22 @@ public class UserService {
     public User registerUser(User user) {
         user.setRole(User.Role.BASIC_USER);
         return userRepository.save(user);
+    }
+
+    public boolean removeUser(String username, Credentials creds) {
+
+        if (!username.equals(creds.getUsername())) {
+            throw new InvalidRequestException("Submitted username does not match currently logged in user.");
+        }
+
+        User user = authenticate(creds.getUsername(), creds.getPassword());
+
+        if (user == null) {
+            throw new InvalidRequestException("Submitted password is incorrect.");
+        } else {
+            userRepository.delete(user);
+            return true;
+        }
     }
 
     public UserDTO addFavorite(RecipeDTO recipeDTO, String username) {
