@@ -12,11 +12,6 @@ import java.util.*;
 @RestControllerAdvice
 public class ExceptionHandlerAspect {
 
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    @ExceptionHandler(ResourceNotFoundException.class)
-//    public void handleResourceNotFoundException() { }
-
-    //Returns a DTO ErrorMessage containing JSON of certain information that can be parsed and handled in the UI
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidIngredientException.class)
     public ErrorMessage handleInvalidIngredientException(InvalidIngredientException e, WebRequest request) {
@@ -37,4 +32,8 @@ public class ExceptionHandlerAspect {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AuthorizationException.class)
     public void handleAuthorizationException() { }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ResourcePersistenceException.class)
+    public void handleResourcePersistenceException() { }
 }

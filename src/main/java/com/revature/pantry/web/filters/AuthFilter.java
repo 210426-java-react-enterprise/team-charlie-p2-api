@@ -44,7 +44,7 @@ public class AuthFilter implements Filter {
         try {
 
             String header = req.getHeader(jwtConfig.getHeader());
-
+            logger.info("Current header " + header);
             if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
                 logger.info("Request originates from an unauthenticated source.");
                 return;

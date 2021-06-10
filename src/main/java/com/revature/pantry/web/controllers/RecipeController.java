@@ -16,8 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/recipe")
 public class RecipeController {
   
-  private EdamamService edamamService;
-
+	private EdamamService edamamService;
 	private RecipeService recipeService;
 
 	@Autowired
@@ -26,39 +25,36 @@ public class RecipeController {
     this.edamamService = edamamService;
 	}
 
-	@GetMapping(value = "/find/id", produces = APPLICATION_JSON_VALUE)
-	public Recipe findRecipeById(@RequestParam Integer id) {
+
+	@GetMapping(value = "/id/{id}", produces = APPLICATION_JSON_VALUE)
+	public Recipe findRecipeById(@PathVariable Integer id) {
 		return recipeService.findById(id);
 	}
 
-	@GetMapping(value = "/find/url", produces = APPLICATION_JSON_VALUE)
-	public Recipe findRecipeByUrl(@RequestBody String url) {
+	@GetMapping(value = "/url/{url}", produces = APPLICATION_JSON_VALUE)
+	public Recipe findRecipeByUrl(@PathVariable String url) {
 		return recipeService.findByUrl(url);
 	}
 
+
+	@Deprecated
 	@PostMapping(value = "/save/one", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public Recipe save(@RequestBody Recipe recipe) {
-		if (!recipeService.isRecipeValid(recipe)) {
-			throw new InvalidRecipeException("Invalid recipe, could not save");
-		}
 		return recipeService.save(recipe);
 	}
 
+	@Deprecated
 	@PostMapping(value = "/save/all", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public List<Recipe> saveAll(@RequestBody List<Recipe> recipes) {
-		for (Recipe recipe : recipes) {
-			if (!recipeService.isRecipeValid(recipe)) {
-				throw new InvalidRecipeException("One of the Recipes you were trying to save was invalid");
-			}
-		}
 		return recipeService.saveAll(recipes);
 	}
 
-  @GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
-  @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
-  public List<RecipeDTO> searchRecipes(@RequestParam String q){
-    edamamService.isIngredientValid(q);
-    return edamamService.getRecipesFromEdamam(q);    
-  }
+
+	@GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
+	@Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+	public List<RecipeDTO> searchRecipes(@RequestParam String q){
+	edamamService.isIngredientValid(q);
+	return edamamService.getRecipesFromEdamam(q);
+	}
 
 }

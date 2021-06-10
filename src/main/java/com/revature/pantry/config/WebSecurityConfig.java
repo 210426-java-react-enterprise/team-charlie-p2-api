@@ -20,6 +20,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().headers()
                 .frameOptions().sameOrigin();
-        
     }
 }
