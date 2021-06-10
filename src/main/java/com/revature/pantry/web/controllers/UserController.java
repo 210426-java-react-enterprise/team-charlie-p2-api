@@ -5,6 +5,7 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
+import com.revature.pantry.web.dtos.Credentials;
 import com.revature.pantry.web.dtos.Principal;
 import com.revature.pantry.web.dtos.RecipeDTO;
 import com.revature.pantry.web.dtos.UserDTO;
@@ -51,6 +52,13 @@ public class UserController {
     @Secured(allowedRoles = {"ADMIN", "BASIC_USER"})
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
+        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
+        userService.removeUser(username, creds);
     }
 
     @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
