@@ -1,7 +1,6 @@
 package com.revature.pantry.services;
 
 import com.revature.pantry.exceptions.*;
-import com.revature.pantry.models.*;
 import com.revature.pantry.web.dtos.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
@@ -11,8 +10,6 @@ import org.springframework.web.client.*;
 
 import java.util.*;
 import java.util.regex.*;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 public class EdamamService {

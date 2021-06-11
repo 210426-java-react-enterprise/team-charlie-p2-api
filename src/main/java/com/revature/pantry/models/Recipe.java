@@ -48,10 +48,17 @@ public class Recipe {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "recipes")
-    private List<MealTime> mealTimes;
+    //V2
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "recipes")
+//    private List<MealTime> mealTimes;
 
+    //V3
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe")
+    private List<MealTime> mealTimeList;
+    
+    @JsonIgnore
     @Column(name = "ingredient_lines")
     private String[] ingredientLines;
 
@@ -67,15 +74,24 @@ public class Recipe {
         this.image = image;
     }
 
-    public List<MealTime> getMealTimes() {
-        return mealTimes;
+    //V2
+//    public List<MealTime> getMealTimes() {
+//        return mealTimes;
+//    }
+//
+//    public void setMealTimes(List<MealTime> mealTimes) {
+//        this.mealTimes = mealTimes;
+//    }
+    
+    //V3
+    public List<MealTime> getMealTimeList() {
+        return mealTimeList;
     }
-
-    public void setMealTimes(List<MealTime> mealTimes) {
-        this.mealTimes = mealTimes;
+    
+    public void setMealTimeList(List<MealTime> mealTimeList) {
+        this.mealTimeList = mealTimeList;
     }
-
-
+    
     public int getId() {
         return id;
     }
@@ -136,7 +152,6 @@ public class Recipe {
         this.users.add(user);
         user.getFavorites().add(this);
     }
-
     public void removeUser(User user) {
         this.users.remove(user);
         user.getFavorites().remove(this);

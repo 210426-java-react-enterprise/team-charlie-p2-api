@@ -32,10 +32,21 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    List<MealPlan> mealPlans;
-
+//V2
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "meal_plan_id")
+//    private MealPlan mealPlan;
+    
+    //V3
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name= "user_meal_times",
+            joinColumns={@JoinColumn(name="user_id")},
+            inverseJoinColumns={@JoinColumn(name ="meal_time_id")}
+    )
+    private List<MealTime> mealTimeList;
+    
+    
     @Enumerated(value = EnumType.STRING)
     Role role;
 
@@ -77,17 +88,36 @@ public class User {
         this.role = role;
     }
 
-    public List<MealPlan> getMealPlans() {
-        return mealPlans;
+//V2
+//    public MealPlan getMealPlan() {
+//        return mealPlan;
+//    }
+//
+//    public void setMealPlan(MealPlan mealPlan) { this.mealPlan = mealPlan; }
+    
+    public List<MealTime> getMealTimesList() {
+        return mealTimeList;
+    }
+    
+    public void setMealTimesList(List<MealTime> mealTimeList) {
+        this.mealTimeList = mealTimeList;
+    }
+    
+    public void addMealTimeToList(MealTime mealTime){
+        this.mealTimeList.add(mealTime);
+        mealTime.getUserList().add(this);
+        
+    }
+    
+    public void removeMealTimeToList(MealTime mealTime){
+        this.mealTimeList.remove(mealTime);
+        mealTime.getUserList().remove(this);
+    }
+    
+    public int getId() { return id;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
     public String getUsername() {
         return username;
