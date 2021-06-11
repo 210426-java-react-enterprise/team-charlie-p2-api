@@ -8,7 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 
+import javax.validation.Valid;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -17,16 +21,20 @@ public class MealTimeDTO {
     
     @NotNull
     @DateTimeFormat
+    @FutureOrPresent
     @JsonProperty("date")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
     private LocalDate date;
     
     @NotNull
+    @Max(value = 20)
+    @Pattern(regexp = "^[A-Za-z0-9\\s]*$")
     @JsonProperty("time")
     @JsonFormat(shape =  JsonFormat.Shape.STRING)
     private String time;
     
     @NotNull
+    @Valid
     @JsonProperty("recipe")
     @JsonFormat(shape =  JsonFormat.Shape.OBJECT)
     private Recipe recipe;
