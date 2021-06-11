@@ -68,13 +68,6 @@ public class UserController {
         return userService.addFavorite(recipeDTO, username);
     }
 
-    @PatchMapping(value = "/favorite/{id}", produces = APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO addExistingFavorite(@PathVariable int id, HttpServletRequest req) {
-        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
-        return userService.addFavorite(id, username);
-    }
-
     @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserDTO favoriteRecipes(@RequestBody @Valid List<RecipeDTO> recipeDTO, HttpServletRequest req) {

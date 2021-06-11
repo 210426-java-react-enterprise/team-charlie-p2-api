@@ -73,6 +73,12 @@ public class Recipe{
         this.image = image;
     }
 
+    public Recipe(String label, String url, String image, int calories, int yield) {
+        this(label, url, image);
+        this.calories = calories;
+        this.yield = yield;
+    }
+
 
     public Recipe(RecipeDTO recipeDTO) {
         this.yield = recipeDTO.getYield();

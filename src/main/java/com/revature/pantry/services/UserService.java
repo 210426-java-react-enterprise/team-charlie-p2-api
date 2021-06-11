@@ -77,13 +77,7 @@ public class UserService {
         UserDTO userDTO = new UserDTO();
 
         if (!_recipe.isPresent()) {
-            recipe = new Recipe();
-            recipe.setLabel(recipeDTO.getLabel());
-            recipe.setImage(recipeDTO.getImage());
-            recipe.setUrl(recipeDTO.getUrl());
-            recipe.setCalories(recipeDTO.getCalories());
-            recipe.setYield(recipeDTO.getYield());
-            recipe = recipeRepository.save(recipe);
+            recipe = recipeRepository.save(new Recipe(recipeDTO));
         }
         if (_user.isPresent()) {
             User user = _user.get();
@@ -97,28 +91,7 @@ public class UserService {
             userDTO.setUsername(user.getUsername());
             return userDTO;
         } else {
-            throw new InvalidRequestException("Your request is invalid!");
-        }
-    }
-
-    public UserDTO addFavorite(int recipeId, String username) {
-        Optional<Recipe> _recipe = recipeRepository.findById(recipeId);
-        Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
-        UserDTO result = new UserDTO();
-
-        if (_user.isPresent() && _recipe.isPresent()) {
-            User user = _user.get();
-            Recipe recipe = _recipe.get();
-
-            user.addFavorite(recipe);
-            recipe.addUser(user);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
-            result.setUsername(username);
-            result.setFavorites(user.getFavorites());
-            return result;
-        } else {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("A wrong username got here somehow.");
         }
     }
 
@@ -160,8 +133,9 @@ public class UserService {
         }
     }
 
-    public void saveMealPlan(User user) {
+    public boolean saveMealPlan(User user) {
         userRepository.save(user);
+        return true;
     }
 }
 
