@@ -27,7 +27,16 @@ public class ExceptionHandlerAspect {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
-    public void handleAuthenticationException() { }
+    public ErrorMessage handleAuthenticationException(AuthenticationException e, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                e.getMessage(),
+                request.getDescription(false)
+        );
+
+        return message;
+    }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AuthorizationException.class)
@@ -35,5 +44,14 @@ public class ExceptionHandlerAspect {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ResourcePersistenceException.class)
-    public void handleResourcePersistenceException() { }
+    public ErrorMessage handleResourcePersistenceException(ResourcePersistenceException e, WebRequest request) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.UNAUTHORIZED.value(),
+                new Date(),
+                e.getMessage(),
+                request.getDescription(false)
+        );
+
+        return message;
+    }
 }
