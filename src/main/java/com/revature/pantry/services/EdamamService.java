@@ -31,10 +31,8 @@ public class EdamamService {
     public List<RecipeDTO> getRecipesFromEdamam(@RequestParam String q){
 
         String apiUrl = String.format("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, app_id, app_key);
-        ResponseEntity<Response> edamamResponse = restTemplate.getForEntity(apiUrl, Response.class);
-        //System.out.println(edamamResponse.getStatusCode());
-
-        Response response = Objects.requireNonNull(edamamResponse.getBody());
+        ResponseEntity responseEntity = restTemplate.getForEntity(apiUrl, Response.class);
+        Response response = (Response) responseEntity.getBody();
 
         List<Hit> hits = response.getHits();
         List<RecipeDTO> recipes = new ArrayList<RecipeDTO>();

@@ -25,6 +25,19 @@ public class Response {
     @JsonProperty("hits")
     private List<Hit> hits;
 
+    public Response(){
+        super();
+    }
+
+    public Response(String q, int from, int to, int count, boolean more, List<Hit> hits) {
+        this.q = q;
+        this.from = from;
+        this.to = to;
+        this.count = count;
+        this.more = more;
+        this.hits = hits;
+    }
+
     public String getQ() {
         return q;
     }
