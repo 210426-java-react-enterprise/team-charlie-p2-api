@@ -7,8 +7,6 @@ import javax.validation.constraints.NotNull;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class RecipeDTO {
 
-
-
         @NotNull
         private String label;
         @NotNull

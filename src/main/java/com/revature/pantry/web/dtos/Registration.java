@@ -1,23 +1,26 @@
 package com.revature.pantry.web.dtos;
 
+
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
-public class NewUserDTO {
+public class Registration {
 
-    public NewUserDTO() {
-
-    }
-
-    @NotEmpty
+    @Length(min = 3, max = 20)
+    @Pattern(regexp = "^[a-zA-Z0-9_.-]*$")
     private String username;
 
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$")
     private String password;
 
     @Email
     private String email;
+
+    public Registration() {
+
+    }
 
     public String getUsername() {
         return username;

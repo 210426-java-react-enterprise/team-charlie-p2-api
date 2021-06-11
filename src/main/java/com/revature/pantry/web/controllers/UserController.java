@@ -5,11 +5,7 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
-import com.revature.pantry.web.dtos.Credentials;
-import com.revature.pantry.web.dtos.Principal;
-import com.revature.pantry.web.dtos.RecipeDTO;
-import com.revature.pantry.web.dtos.NewUserDTO;
-import com.revature.pantry.web.dtos.UserDTO;
+import com.revature.pantry.web.dtos.*;
 import com.revature.pantry.web.security.Secured;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +40,7 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser (@RequestBody NewUserDTO user) {
+    public void registerUser (@RequestBody Registration user) {
         userService.registerUser(user);
     }
 

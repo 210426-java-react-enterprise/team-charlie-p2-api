@@ -6,10 +6,7 @@ import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
-import com.revature.pantry.web.dtos.Credentials;
-import com.revature.pantry.web.dtos.RecipeDTO;
-import com.revature.pantry.web.dtos.NewUserDTO;
-import com.revature.pantry.web.dtos.UserDTO;
+import com.revature.pantry.web.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +39,7 @@ public class UserService {
                 .orElseThrow(InvalidRequestException::new);
     }
 
-    public User registerUser(NewUserDTO newUser) {
+    public User registerUser(Registration newUser) {
         User user = new User(newUser.getUsername(), newUser.getPassword(), newUser.getEmail());
         user.setRole(User.Role.BASIC_USER);
         User registeredUser = null;
