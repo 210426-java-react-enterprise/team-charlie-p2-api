@@ -55,12 +55,14 @@ public class UserService {
      */
 
     private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalidException {
-        
+
         //Evaluates if the string passed is null or empty
         Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
-        
-        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalidException(field+ ": empty or null");}
 
+        if (isNullOrEmptyPredicate.test(strToEval)) {
+            throw new UserDataIsInvalidException(field + ": empty or null");
+        }
+    }
     /**
      * This method is part of isUserValid
      *
