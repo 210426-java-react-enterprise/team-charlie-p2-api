@@ -37,7 +37,7 @@ public class AuthController {
         User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
         String jwt = tokenGenerator.createJwt(user);
         response.setHeader(jwtConfig.getHeader(), jwt);
-        return new UserDTO(user.getUsername(), user.getFavorites(), user.getId()); //user.getMealPlan() when that's implemented. make a 3 args constructor
+        return new UserDTO(user.getUsername(), user.getFavorites(), user.getMealTimesList());
     }
 
 }

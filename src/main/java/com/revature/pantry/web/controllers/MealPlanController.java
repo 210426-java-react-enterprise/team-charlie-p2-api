@@ -8,8 +8,7 @@ import com.revature.pantry.models.User;
 import com.revature.pantry.services.MealService;
 import com.revature.pantry.services.RecipeService;
 import com.revature.pantry.services.UserService;
-import com.revature.pantry.web.dtos.MealPlanDTO;
-import com.revature.pantry.web.dtos.MealTimeDTO;
+import com.revature.pantry.web.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,17 +38,17 @@ public class MealPlanController {
         }
         
         @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
-        public void savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
-                List<MealTime> mealTimeList = new ArrayList<>();
+        public UserDTO savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
+                //TODO Need to handle null users
                 User user = userService.findUserById(mealPlan.getUserId());
-                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> { ;
+                mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
                         MealTime mealTime = new MealTime();
                         mealTime.setDate(mealTimeDTO.getDate());
                         mealTime.setMealTime(mealTimeDTO.getTime());
                         mealTime.setRecipe(mealTimeDTO.getRecipe());
                         user.getMealTimesList().add(mealService.saveMealTime(mealTime));
                 });
-                userService.saveMealPlan(user);
+                return userService.saveMealPlan(user);
         }
        
         

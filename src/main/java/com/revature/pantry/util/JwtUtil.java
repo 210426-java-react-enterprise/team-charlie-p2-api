@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
  *
  * A utility class for dealing with tokens. Currently only used to extract the username from the token, but this was made
  * to save repeats of code.
+ * @author Richard Taylor
  */
 @Component
 public class JwtUtil {
