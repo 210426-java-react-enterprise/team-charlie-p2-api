@@ -40,7 +40,7 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser (@RequestBody Registration user) {
+    public void registerUser (@RequestBody @Valid Registration user) {
         userService.registerUser(user);
     }
 
