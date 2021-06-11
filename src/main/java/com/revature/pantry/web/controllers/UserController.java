@@ -44,8 +44,16 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser (@RequestBody User user) {
-        userService.registerUser(user);
+    public UserDTO registerUser (@RequestBody User user) {
+        User newUser = userService.registerUser(user);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setMealTimeList(newUser.getMealTimesList());
+        userDTO.setUsername(newUser.getUsername());
+        userDTO.setFavorites(newUser.getFavorites());
+        userDTO.setUser_id(newUser.getId());
+
+        return userDTO;
+
     }
 
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)

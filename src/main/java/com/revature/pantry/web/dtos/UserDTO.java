@@ -1,6 +1,6 @@
 package com.revature.pantry.web.dtos;
 
-import com.revature.pantry.models.Recipe;
+import com.revature.pantry.models.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -13,9 +13,14 @@ public class UserDTO {
     }
 
     @NotNull
+    private int user_id;
+
+    @NotNull
     private String username;
 
     private Set<Recipe> favorites;
+
+    private List<MealTime> mealTimeList;
 
     public String getUsername() {
         return username;
@@ -31,5 +36,21 @@ public class UserDTO {
 
     public void setFavorites(Set<Recipe> favorites) {
         this.favorites = favorites;
+    }
+
+    public List<MealTime> getMealTimeList() {
+        return mealTimeList;
+    }
+
+    public void setMealTimeList(List<MealTime> mealTimeList) {
+        this.mealTimeList = mealTimeList;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 }

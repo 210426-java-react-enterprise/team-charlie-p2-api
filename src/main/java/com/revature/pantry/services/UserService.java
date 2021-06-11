@@ -49,17 +49,19 @@ public class UserService {
     /**
      * This method is responsible for validate the user data inputs against the app constraints
      *
-     * @param user - User data to be audit
      * @return TRUE if data passed all the constraints
      * @throws UserDataIsInvalidException - Return this exception if the User Data not satisfied the constraints
      */
 
     private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalidException {
-        
+
         //Evaluates if the string passed is null or empty
         Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
-        
-        if(isNullOrEmptyPredicate.test(strToEval)) { throw new UserDataIsInvalidException(field+ ": empty or null");}
+
+        if (isNullOrEmptyPredicate.test(strToEval)) {
+            throw new UserDataIsInvalidException(field + ": empty or null");
+        }
+    }
 
     /**
      * This method is part of isUserValid
@@ -150,6 +152,8 @@ public class UserService {
             recipeRepository.save(recipe);
             userDTO.setFavorites(user.getFavorites());
             userDTO.setUsername(user.getUsername());
+            userDTO.setMealTimeList(user.getMealTimesList());
+            userDTO.setUser_id(user.getId());
             return userDTO;
         } else {
             throw new InvalidRequestException("Your request is invalid!");
@@ -194,8 +198,16 @@ public class UserService {
         }
     }
     
-    public void saveMealPlan(User user){
-        userRepository.save(user);
+    public UserDTO saveMealPlan(User user){
+        UserDTO userDTO = new UserDTO();
+        User updatedUser = userRepository.save(user);
+        userDTO.setFavorites(updatedUser.getFavorites());
+        userDTO.setUsername(updatedUser.getUsername());
+        userDTO.setMealTimeList(updatedUser.getMealTimesList());
+        userDTO.setUser_id(updatedUser.getId());
+
+        return userDTO;
+
     }
 }
 
