@@ -31,10 +31,10 @@ public class RecipeController {
 		return recipeService.findById(id);
 	}
 
-	@GetMapping(value = "/url/{url}", produces = APPLICATION_JSON_VALUE)
-	public Recipe findRecipeByUrl(@PathVariable String url) {
-		return recipeService.findByUrl(url);
-	}
+//	@GetMapping(value = "/url/{url}", produces = APPLICATION_JSON_VALUE)
+//	public Recipe findRecipeByUrl(@PathVariable String url) {
+//		return recipeService.findByUrl(url);
+//	}
 
 
 	@Deprecated

@@ -12,8 +12,20 @@ public class UserDTO {
 
     }
 
+    public UserDTO(String username, Set<Recipe> favorites) {
+        this.username = username;
+        this.favorites = favorites;
+    }
+
+    public UserDTO(String username, Set<Recipe> favorites, int userId) {
+        this(username, favorites);
+        this.userId = userId;
+    }
+
     @NotNull
     private String username;
+
+    private int userId;
 
     private Set<Recipe> favorites;
 

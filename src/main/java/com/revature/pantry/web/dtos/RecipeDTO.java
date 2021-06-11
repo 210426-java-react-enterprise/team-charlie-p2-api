@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class RecipeDTO {
 
+
+
         @NotNull
         private String label;
         @NotNull
@@ -20,6 +22,14 @@ import javax.validation.constraints.NotNull;
 
         public RecipeDTO(){
             super();
+        }
+
+        public RecipeDTO(String label, int calories, int yield, String url, String image) {
+            this.label = label;
+            this.calories = calories;
+            this.yield = yield;
+            this.url = url;
+            this.image = image;
         }
 
         public String getLabel() {

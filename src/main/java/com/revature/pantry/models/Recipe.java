@@ -1,6 +1,7 @@
 package com.revature.pantry.models;
 
 import com.fasterxml.jackson.annotation.*;
+import com.revature.pantry.web.dtos.RecipeDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ import java.util.*;
 @Entity
 @Table(name = "recipes")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Recipe {
+public class Recipe{
 
 
     @Id
@@ -64,6 +65,21 @@ public class Recipe {
 
     public Recipe() {
 
+    }
+
+    public Recipe(String label, String url, String image) {
+        this.label = label;
+        this.url = url;
+        this.image = image;
+    }
+
+
+    public Recipe(RecipeDTO recipeDTO) {
+        this.yield = recipeDTO.getYield();
+        this.calories = recipeDTO.getCalories();
+        this.url = recipeDTO.getUrl();
+        this.label = recipeDTO.getLabel();
+        this.image = recipeDTO.getImage();
     }
 
     public String getImage() {

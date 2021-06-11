@@ -28,9 +28,9 @@ public class RecipeService {
         return recipeRepository.findById(id).orElseThrow(InvalidRecipeException::new);
 	}
 	
-	public Recipe findByUrl(String url) {
-		return recipeRepository.findByUrl(url).orElseThrow(InvalidRecipeException::new);
-	}
+//	public Recipe findByUrl(String url) {
+//		return recipeRepository.findByUrl(url).orElseThrow(InvalidRecipeException::new);
+//	}
 	
 	public Recipe save(Recipe recipe) {
         isRecipeValid(recipe);
