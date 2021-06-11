@@ -62,7 +62,6 @@ public class UserService {
             throw new UserDataIsInvalidException(field + ": empty or null");
         }
     }
-
     /**
      * This method is part of isUserValid
      *
