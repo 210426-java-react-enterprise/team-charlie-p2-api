@@ -19,6 +19,11 @@ import java.util.Set;
 
 import static org.springframework.http.MediaType.*;
 
+/**
+ * UserController
+ *
+ * The main controller for handling requests to do with users.
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,8 +31,8 @@ public class UserController {
     @Value("${jwt.header}")
     private String header;
 
-    private UserRepository userRepository;
-    private UserService userService;
+    private final UserRepository userRepository;
+    private final UserService userService;
     private final JwtUtil jwtUtil;
 
 
@@ -38,18 +43,35 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Takes in a registration JSON from the request, validates it, then calls the service to register a user.
+     *
+     * @param user the JSON for registration
+     * @author Richard Taylor
+     */
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void registerUser (@RequestBody @Valid Registration user) {
         userService.registerUser(user);
     }
 
+    /**
+     * Returns a list of all registered users. Can only be accessed by an admin.
+     * @return a list of all users.
+     */
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
-    @Secured(allowedRoles = {"ADMIN", "BASIC_USER"})
+    @Secured(allowedRoles = {"ADMIN"})
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    /**
+     * Takes in a set of credentials and performs basic validation on them. Then calls the services to delete a user account.
+     *
+     * @param creds the credentials as a JSON
+     * @param req the request provided by Spring
+     * @author Austin Knauer
+     */
     @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
@@ -57,6 +79,14 @@ public class UserController {
         userService.removeUser(username, creds);
     }
 
+    /**
+     * Takes in a JSON for a recipe and calls the service to add it to the list of the user's favorites.
+     *
+     * @param recipeDTO the JSON of the recipe
+     * @param req the request provided by Spring
+     * @return an updated DTO of the user
+     * @author Richard Taylor
+     */
     @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
@@ -64,6 +94,14 @@ public class UserController {
         return userService.addFavorite(recipeDTO, username);
     }
 
+    /**
+     * Takes a JSON for a list of recipes and calls the service to add it to the list of the user's favorites
+     *
+     * @param recipeDTO the JSON of the recipes
+     * @param req the request provided by Spring
+     * @return an updated DTO of the user
+     * @author Kevin Chang
+     */
     @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserDTO favoriteRecipes(@RequestBody @Valid List<RecipeDTO> recipeDTO, HttpServletRequest req) {
@@ -71,6 +109,12 @@ public class UserController {
         return userService.addFavorites(recipeDTO, username);
     }
 
+    /**
+     * Removes the recipe from the user's favorite list that corresponds to the recipeId of the path variable
+     * @param req the request provided by Spring
+     * @param recipeId the Id of the recipe to be removed
+     * @author Richard Taylor
+     */
     @DeleteMapping(value = "/favorite/{recipeId}")
     @ResponseStatus(HttpStatus.OK)
     public void removeFavorite(HttpServletRequest req, @PathVariable int recipeId) {
@@ -78,6 +122,13 @@ public class UserController {
         userService.removeFavoriteRecipe(username, recipeId);
     }
 
+    /**
+     * calls the service and returns the list of the user's favorite recipes
+     *
+     * @param req the request provided by Spring
+     * @return a list of recipes in the form of a JSON
+     * @author Richard Taylor
+     */
     @GetMapping(value = "/favorite")
     @ResponseStatus(HttpStatus.OK)
     public Set<Recipe> getFavoriteRecipes(HttpServletRequest req) {

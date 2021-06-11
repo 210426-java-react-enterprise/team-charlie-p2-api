@@ -9,6 +9,14 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+/**
+ * LoggingAspect
+ *
+ * Logs all method calls and exceptions for all classes except filters.
+ *
+ * @author Kevin Chang
+ * @author Wezley Sinleton
+ */
 @Aspect
 @Component
 public class LoggingAspect {

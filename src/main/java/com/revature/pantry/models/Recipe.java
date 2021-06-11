@@ -41,20 +41,10 @@ public class Recipe{
     @JsonProperty("image")
     private String image;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-//    private List<UserFavoriteRecipe> favorites;
-
     @ManyToMany(mappedBy = "favorites") //field name of relation owner
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
-    //V2
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "recipes")
-//    private List<MealTime> mealTimes;
-
-    //V3
     @JsonIgnore
     @OneToMany(mappedBy = "recipe")
     private List<MealTime> mealTimeList;
@@ -96,16 +86,6 @@ public class Recipe{
         this.image = image;
     }
 
-    //V2
-//    public List<MealTime> getMealTimes() {
-//        return mealTimes;
-//    }
-//
-//    public void setMealTimes(List<MealTime> mealTimes) {
-//        this.mealTimes = mealTimes;
-//    }
-    
-    //V3
     public List<MealTime> getMealTimeList() {
         return mealTimeList;
     }

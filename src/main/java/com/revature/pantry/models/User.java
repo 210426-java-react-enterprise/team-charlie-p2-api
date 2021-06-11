@@ -1,10 +1,7 @@
 package com.revature.pantry.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,12 +34,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-//V2
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "meal_plan_id")
-//    private MealPlan mealPlan;
-    
-    //V3
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name= "user_meal_times",
@@ -54,10 +45,6 @@ public class User {
     
     @Enumerated(value = EnumType.STRING)
     Role role;
-
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<UserFavoriteRecipe> favorites;
 
     @ManyToMany (cascade = {CascadeType.ALL})
     @JoinTable (
@@ -92,13 +79,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-//V2
-//    public MealPlan getMealPlan() {
-//        return mealPlan;
-//    }
-//
-//    public void setMealPlan(MealPlan mealPlan) { this.mealPlan = mealPlan; }
     
     public List<MealTime> getMealTimesList() {
         return mealTimeList;

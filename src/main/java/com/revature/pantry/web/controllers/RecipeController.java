@@ -25,17 +25,11 @@ public class RecipeController {
     this.edamamService = edamamService;
 	}
 
-
+	@Deprecated
 	@GetMapping(value = "/id/{id}", produces = APPLICATION_JSON_VALUE)
 	public Recipe findRecipeById(@PathVariable Integer id) {
 		return recipeService.findById(id);
 	}
-
-//	@GetMapping(value = "/url/{url}", produces = APPLICATION_JSON_VALUE)
-//	public Recipe findRecipeByUrl(@PathVariable String url) {
-//		return recipeService.findByUrl(url);
-//	}
-
 
 	@Deprecated
 	@PostMapping(value = "/save/one", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -50,6 +44,12 @@ public class RecipeController {
 	}
 
 
+	/**
+	 * Takes in a search query and passes it along to the service to search for recipes
+	 * @param q the search query
+	 * @return a list of Recipes in the form of JSON
+	 * @author Kevin Chang
+	 */
 	@GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
 	@Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
 	public List<RecipeDTO> searchRecipes(@RequestParam String q){

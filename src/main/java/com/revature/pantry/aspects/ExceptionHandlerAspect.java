@@ -10,6 +10,14 @@ import org.springframework.web.context.request.*;
 
 import java.util.*;
 
+/**
+ * ExceptionHandlerAspect
+ *
+ * Aspect for handling our custom exceptions. Every custom exception that makes it to a controller will be handled here, sending back a relevant response code and error message.
+ *
+ * @author Austin Knauer
+ * @author Oswaldo Castillo
+ */
 @RestControllerAdvice
 public class ExceptionHandlerAspect {
 
