@@ -1,6 +1,7 @@
 package com.revature.pantry.models;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -21,7 +22,7 @@ public class Recipe {
     @NotNull
     @Column(nullable = false)
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Length(min = 1, max = 100)
     @Pattern(regexp = "^[A-Za-z0-9\\s]+$")
     @JsonProperty("label")
     private String label;

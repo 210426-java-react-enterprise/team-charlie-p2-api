@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.revature.pantry.models.Recipe;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -27,7 +28,7 @@ public class MealTimeDTO {
     private LocalDate date;
     
     @NotNull
-    @Max(value = 20)
+    @Length(min = 0, max = 20)
     @Pattern(regexp = "^[A-Za-z0-9\\s]*$")
     @JsonProperty("time")
     @JsonFormat(shape =  JsonFormat.Shape.STRING)
