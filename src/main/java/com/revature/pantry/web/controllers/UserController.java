@@ -56,7 +56,7 @@ public class UserController {
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(newUser.getMealTimesList());
         userDTO.setUsername(newUser.getUsername());
-        userDTO.setFavorites(newUser.getFavorites());
+ //       userDTO.setFavorites(newUser.getFavorites());
         userDTO.setUser_id(newUser.getId());
         return userDTO;
     }
@@ -137,7 +137,7 @@ public class UserController {
      */
     @GetMapping(value = "/favorite")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Recipe> getFavoriteRecipes(HttpServletRequest req) {
+    public Set<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.getFavoriteRecipes(username);
     }

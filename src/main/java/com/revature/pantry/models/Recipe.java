@@ -41,9 +41,12 @@ public class Recipe{
     @JsonProperty("image")
     private String image;
 
-    @ManyToMany(mappedBy = "favorites") //field name of relation owner
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
+//    @ManyToMany(mappedBy = "favorites") //field name of relation owner
+//    @JsonIgnore
+//    private Set<User> users = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.recipe", cascade = CascadeType.ALL)
+    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "recipe")
@@ -142,20 +145,29 @@ public class Recipe{
         this.ingredientLines = ingredientLines;
     }
 
-    public Set<User> getUsers() {
-        return users;
+//    public Set<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(Set<User> users) {
+//        this.users = users;
+//    }
+//
+//    public void addUser(User user){
+//        this.users.add(user);
+//        user.getFavorites().add(this);
+//    }
+//    public void removeUser(User user) {
+//        this.users.remove(user);
+//        user.getFavorites().remove(this);
+//    }
+
+
+    public Set<FavoriteRecipe> getFavoriteRecipes() {
+        return favoriteRecipes;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public void addUser(User user){
-        this.users.add(user);
-        user.getFavorites().add(this);
-    }
-    public void removeUser(User user) {
-        this.users.remove(user);
-        user.getFavorites().remove(this);
+    public void setFavoriteRecipes(Set<FavoriteRecipe> favoriteRecipes) {
+        this.favoriteRecipes = favoriteRecipes;
     }
 }

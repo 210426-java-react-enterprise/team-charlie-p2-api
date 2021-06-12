@@ -12,18 +12,23 @@ public class UserDTO {
 
     }
 
-<<<<<<< HEAD
-    public UserDTO(String username, Set<Recipe> favorites) {
+    public UserDTO(User user) {
+        this.username = user.getUsername();
+        this.user_id = user.getId();
+        this.favorites = user.getFavorites();
+        this.mealTimeList = user.getMealTimesList();
+    }
+
+    public UserDTO(String username, Set<FavoriteDTO> favorites) {
         this.username = username;
         this.favorites = favorites;
     }
 
-    public UserDTO(String username, Set<Recipe> favorites, int userId) {
+    public UserDTO(String username, Set<FavoriteDTO> favorites, int userId) {
         this(username, favorites);
-        this.userId = userId;
+        this.user_id = userId;
     }
-=======
-    public UserDTO(@NotNull String username, Set<Recipe> favorites, List<MealTime> mealTimeList) {
+    public UserDTO(@NotNull String username, Set<FavoriteDTO> favorites, List<MealTime> mealTimeList) {
         this.username = username;
         this.favorites = favorites;
         this.mealTimeList = mealTimeList;
@@ -31,14 +36,11 @@ public class UserDTO {
 
     @NotNull
     private int user_id;
->>>>>>> 4661a3d9f47723bc92abb965348890b52a86dbe2
 
     @NotNull
     private String username;
 
-    private int userId;
-
-    private Set<Recipe> favorites;
+    private Set<FavoriteDTO> favorites;
 
     private List<MealTime> mealTimeList;
 
@@ -50,11 +52,11 @@ public class UserDTO {
         this.username = username;
     }
 
-    public Set<Recipe> getFavorites() {
+    public Set<FavoriteDTO> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(Set<Recipe> favorites) {
+    public void setFavorites(Set<FavoriteDTO> favorites) {
         this.favorites = favorites;
     }
 

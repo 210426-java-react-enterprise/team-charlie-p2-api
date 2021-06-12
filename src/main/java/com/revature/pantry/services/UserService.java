@@ -2,6 +2,7 @@ package com.revature.pantry.services;
 
 
 import com.revature.pantry.exceptions.*;
+import com.revature.pantry.models.FavoriteRecipe;
 import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
@@ -29,8 +30,8 @@ import java.util.*;
 @Transactional
 public class UserService {
 
-    private UserRepository userRepository;
-    private RecipeRepository recipeRepository;
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, RecipeRepository recipeRepository) {
@@ -129,24 +130,26 @@ public class UserService {
         Optional<Recipe> _recipe = recipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage());
         Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
         Recipe recipe = null;
-        UserDTO userDTO = new UserDTO();
 
         if (!_recipe.isPresent()) {
             recipe = recipeRepository.save(new Recipe(recipeDTO));
         }
         if (_user.isPresent()) {
             User user = _user.get();
-            recipe = (recipe == null) ? _recipe.get() : recipe;
-
-            user.addFavorite(recipe);
-            recipe.addUser(user);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
-            userDTO.setFavorites(user.getFavorites());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setMealTimeList(user.getMealTimesList());
-            userDTO.setUser_id(user.getId());
-            return userDTO;
+            //if the user has already interacted with this recipe, just set favorite to true if they want to re-add it to their
+            //list of favorites.
+            if(recipe == null) {
+                recipe = _recipe.get();
+                for(FavoriteRecipe favorite : user.getFavoriteRecipes()) {
+                    if(favorite.getRecipe().getId() == recipe.getId()) {
+                        favorite.setFavorite(true);
+                        return new UserDTO(userRepository.save(user));
+                    }
+                }
+            }
+            FavoriteRecipe newFavorite = new FavoriteRecipe(user, recipe, true, 0);
+            user.getFavoriteRecipes().add(newFavorite);
+            return new UserDTO(userRepository.save(user));
         } else {
             throw new InvalidRequestException("A wrong username got here somehow.");
         }
@@ -184,12 +187,9 @@ public class UserService {
 
         if (_user.isPresent() && _recipe.isPresent()) {
             User user = _user.get();
-            Recipe recipe = _recipe.get();
-
-            user.removeFavorite(recipe);
-            recipe.removeUser(user);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
+            user.getFavoriteRecipes().stream()
+                    .filter(favorite -> favorite.getRecipe().getId() == recipeId)
+                    .forEach(recipe -> recipe.setFavorite(false));
             return true;
         } else {
             throw new InvalidRequestException();
@@ -204,7 +204,7 @@ public class UserService {
      * @throws InvalidRequestException if an invalid username is provided
      * @author Richard Taylor
      */
-    public Set<Recipe> getFavoriteRecipes(String username) throws InvalidRequestException {
+    public Set<FavoriteDTO> getFavoriteRecipes(String username) throws InvalidRequestException {
         Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
 
         if (_user.isPresent()) {
@@ -223,7 +223,7 @@ public class UserService {
     public UserDTO saveMealPlan(User user){
         UserDTO userDTO = new UserDTO();
         User updatedUser = userRepository.save(user);
-        userDTO.setFavorites(updatedUser.getFavorites());
+    //   userDTO.setFavorites(updatedUser.getFavorites());
         userDTO.setUsername(updatedUser.getUsername());
         userDTO.setMealTimeList(updatedUser.getMealTimesList());
         userDTO.setUser_id(updatedUser.getId());
