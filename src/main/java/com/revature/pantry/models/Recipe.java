@@ -1,9 +1,11 @@
 package com.revature.pantry.models;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.*;
 
 @Entity
@@ -19,21 +21,28 @@ public class Recipe {
 
     @NotNull
     @Column(nullable = false)
+    @NotBlank
+    @Length(min = 1, max = 100)
+    @Pattern(regexp = "^[A-Za-z0-9\\s]+$")
     @JsonProperty("label")
     private String label;
 
     @NotNull
     @Column(nullable = false)
+    @PositiveOrZero
     @JsonProperty("calories")
     private int calories;
 
     @NotNull
     @Column(nullable = false)
+    @PositiveOrZero
     @JsonProperty("yield")
     private int yield;
 
     @NotNull
     @Column(nullable = false)
+    @NotBlank
+    @Pattern(regexp = "^http[s]*://[A-Za-z.]+")
     @JsonProperty("url")
     private String url;
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.revature.pantry.models.MealTime;
 import io.swagger.models.auth.In;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class MealPlanDTO {
     //V3
     @NotNull
     @JsonProperty("day-plan-list")
-    private List<MealTimeDTO> dayPlanList;
+    private List<@Valid MealTimeDTO> dayPlanList;
     
     
     public int getUserId() {
