@@ -44,6 +44,7 @@ public class MealPlanController {
                 mealPlan.getDayPlanList().stream().forEach(mealTimeDTO -> {
                         MealTime mealTime = new MealTime();
                         mealTime.setDate(mealTimeDTO.getDate());
+                        mealTime.setEaten(mealTimeDTO.isEaten());
                         mealTime.setMealTime(mealTimeDTO.getTime());
                         mealTime.setRecipe(mealTimeDTO.getRecipe());
                         user.getMealTimesList().add(mealService.saveMealTime(mealTime));
@@ -62,6 +63,7 @@ public class MealPlanController {
         user.getMealTimesList().stream().forEach(mealTime -> {
                 MealTimeDTO mealTimeDTO = new MealTimeDTO();
                 mealTimeDTO.setDate(mealTime.getDate());
+                mealTimeDTO.setEaten(mealTime.isEaten());
                 mealTimeDTO.setTime(mealTime.getMealTime());
                 mealTimeDTO.setRecipe(mealTime.getRecipe());
                 mealTimeList.add(mealTimeDTO);

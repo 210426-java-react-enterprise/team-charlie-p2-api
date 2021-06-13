@@ -31,6 +31,9 @@ public class MealTimeDTO {
     @JsonFormat(shape =  JsonFormat.Shape.OBJECT)
     private Recipe recipe;
 
+    @JsonProperty("eaten")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    private boolean isEaten;
     
     public MealTimeDTO() { super();}
     
@@ -58,7 +61,15 @@ public class MealTimeDTO {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
-    
+
+    public boolean isEaten() {
+        return isEaten;
+    }
+
+    public void setEaten(boolean eaten) {
+        this.isEaten = eaten;
+    }
+
     //V3
     @Override
     public String toString() {

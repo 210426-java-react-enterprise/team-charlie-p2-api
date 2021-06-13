@@ -27,6 +27,10 @@ public class MealTime {
     @Column
     @JsonProperty("time")
     private String mealTime;
+
+    @Column
+    @JsonProperty("eaten")
+    private boolean isEaten;
  
 //V2
 //    @NotNull
@@ -115,5 +119,13 @@ public class MealTime {
     
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public boolean isEaten() {
+        return isEaten;
+    }
+
+    public void setEaten(boolean eaten) {
+        this.isEaten = eaten;
     }
 }
