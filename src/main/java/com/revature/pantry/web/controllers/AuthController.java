@@ -38,12 +38,7 @@ public class AuthController {
         String jwt = tokenGenerator.createJwt(user);
         response.setHeader(jwtConfig.getHeader(), jwt);
         //Once they log in, pulls in current data about the user
-        UserDTO userDTO = new UserDTO();
-        userDTO.setMealTimeList(user.getMealTimesList());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setFavorites(user.getFavorites());
-        userDTO.setUser_id(user.getId());
-        return userDTO;
+        return new UserDTO(user);
     }
 
 }
