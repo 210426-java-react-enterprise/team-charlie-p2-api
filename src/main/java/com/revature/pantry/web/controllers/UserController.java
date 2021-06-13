@@ -56,12 +56,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO registerUser (@RequestBody @Valid Registration user, HttpServletResponse resp) {
         User newUser = userService.registerUser(user);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setMealTimeList(newUser.getMealTimesList());
-        userDTO.setUsername(newUser.getUsername());
- //       userDTO.setFavorites(newUser.getFavorites());
-        userDTO.setUser_id(newUser.getId());
-        return userDTO;
+        return new UserDTO(newUser);
     }
 
     /**

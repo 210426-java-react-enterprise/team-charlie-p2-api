@@ -3,7 +3,6 @@ package com.revature.pantry.aspects;
 
 import com.revature.pantry.exceptions.*;
 import com.revature.pantry.web.dtos.*;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
