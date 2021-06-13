@@ -37,6 +37,7 @@ public class AuthController {
         User user = userService.authenticate(credentials.getUsername(), credentials.getPassword());
         String jwt = tokenGenerator.createJwt(user);
         response.setHeader(jwtConfig.getHeader(), jwt);
+        //Once they log in, pulls in current data about the user
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(user.getMealTimesList());
         userDTO.setUsername(user.getUsername());
