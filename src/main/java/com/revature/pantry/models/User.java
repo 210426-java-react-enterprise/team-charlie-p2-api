@@ -53,32 +53,6 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.user", cascade = CascadeType.ALL)
     private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
-//    @ManyToMany (cascade = {CascadeType.ALL})
-//    @JoinTable (
-//            name = "user_favorite_recipe",
-//            joinColumns = {@JoinColumn(name = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "recipe_id")}
-//    )
-//    private Set<Recipe> favorites = new HashSet<>();
-//
-//    public Set<Recipe> getFavorites() {
-//        return favorites;
-//    }
-//
-//    public void removeFavorite (Recipe recipe) {
-//        this.favorites.remove(recipe);
-//        recipe.getUsers().remove(this);
-//    }
-//
-//    public void addFavorite(Recipe recipe) {
-//        this.favorites.add(recipe);
-//        recipe.getUsers().add(this);
-//    }
-//
-//    public void setFavorites(Set<Recipe> favorites) {
-//        this.favorites = favorites;
-//    }
-
     public Set<FavoriteDTO> getFavorites() {
         return this.favoriteRecipes.stream()
                 .filter(FavoriteRecipe::isFavorite)
