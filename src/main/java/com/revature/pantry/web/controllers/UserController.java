@@ -115,6 +115,13 @@ public class UserController {
         return userService.addFavorites(recipeDTO, username);
     }
 
+    @PatchMapping(value = "/favorite")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateTimesPrepared(@RequestBody FavoriteDTO favoriteDTO, HttpServletRequest req) {
+        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
+        userService.updateTimesPrepared(favoriteDTO, username);
+    }
+
     /**
      * Removes the recipe from the user's favorite list that corresponds to the recipeId of the path variable
      * @param req the request provided by Spring

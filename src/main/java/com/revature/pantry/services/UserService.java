@@ -155,6 +155,21 @@ public class UserService {
         }
     }
 
+    public void updateTimesPrepared(FavoriteDTO favoriteDTO, String username) {
+        Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
+        if(_user.isPresent()) {
+            User user = _user.get();
+            for (FavoriteRecipe favorite : user.getFavoriteRecipes()) {
+                if (favorite.getRecipe().getId() == favoriteDTO.getRecipeId()) {
+                    favorite.setTimesPrepared(favoriteDTO.getTimesPrepared());
+                    userRepository.save(user);
+                }
+            }
+        } else {
+            throw new InvalidRequestException();
+        }
+    }
+
     /**
      * Takes a list of recipes and adds them to the user's list of favorites. Calls <code>addFavorite()</code> for each recipe.
      *
@@ -221,13 +236,8 @@ public class UserService {
      */
     
     public UserDTO saveMealPlan(User user){
-        UserDTO userDTO = new UserDTO();
         User updatedUser = userRepository.save(user);
-    //   userDTO.setFavorites(updatedUser.getFavorites());
-        userDTO.setUsername(updatedUser.getUsername());
-        userDTO.setMealTimeList(updatedUser.getMealTimesList());
-        userDTO.setUser_id(updatedUser.getId());
-        return userDTO;
+        return new UserDTO(updatedUser);
     }
 }
 
