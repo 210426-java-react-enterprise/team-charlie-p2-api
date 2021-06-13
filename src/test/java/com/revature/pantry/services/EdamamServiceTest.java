@@ -1,5 +1,6 @@
 package com.revature.pantry.services;
 
+import com.revature.pantry.exceptions.*;
 import com.revature.pantry.web.dtos.*;
 import org.junit.*;
 import org.springframework.http.*;
@@ -23,12 +24,12 @@ public class EdamamServiceTest {
 
     }
 
-//    @After
-//    public void tearDown(){
-//        //tear down every mock or sut after each test run
-//        mockRestTemplate = null;
-//        sut = null;
-//    }
+    @After
+    public void tearDown(){
+        //tear down every mock or sut after each test run
+        mockRestTemplate = null;
+        sut = null;
+    }
 
     @Test
     public void test_getRecipesFromEdamam(){
@@ -38,6 +39,8 @@ public class EdamamServiceTest {
         List<Hit> hits = new ArrayList<Hit>();
         hits.add(hit1);
         Response response = new Response("chicken", 1, 2, 3, true, hits);
+        List<RecipeDTO> recipeDTOS = new ArrayList<>();
+        recipeDTOS.add(recipeDTO);
 
         String query = "https://api.edamam.com/search?q=chicken&app_id=appid&app_key=appkey";
 
@@ -50,7 +53,9 @@ public class EdamamServiceTest {
 
 
         //Act
-        List<RecipeDTO> listRecipes = sut.getRecipesFromEdamam(query);
+//        Optional<List<RecipeDTO>> _listRecipes = Optional.ofNullable(sut.getRecipesFromEdamam(query));
+//        _listRecipes.orElse(recipeDTOS);
+        List<RecipeDTO> _listRecipes = sut.getRecipesFromEdamam(query);
 
         //Assert
         verify(mockRestTemplate, times(1)).getForEntity(any(), any()).getBody();
@@ -58,11 +63,27 @@ public class EdamamServiceTest {
     }
 
     @Test
-    public void test_isIngredientValid(){
+    public void test_isIngredientValidWithValidIngredients(){
         //Arrange
-        //Act
+        String query = "chicken egg beef";
         //Assert
+        Assert.assertTrue(sut.isIngredientValid(query));
+    }
 
+    @Test(expected = InvalidIngredientException.class)
+    public void test_isIngredientValidWithInvalidIngredients(){
+        //Arrange
+        String query = "chicken egg1 +beef";
+        //Act
+        sut.isIngredientValid(query);
+    }
+
+    @Test(expected = InvalidIngredientException.class)
+    public void test_isIngredientValidWithNoIngredients(){
+        //Arrange
+        String query = "";
+        //Act
+        sut.isIngredientValid(query);
     }
 
 }
