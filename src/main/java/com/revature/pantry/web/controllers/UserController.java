@@ -7,12 +7,15 @@ import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
 import com.revature.pantry.web.dtos.*;
 import com.revature.pantry.web.security.Secured;
+import jdk.jfr.internal.LogLevel;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +54,7 @@ public class UserController {
      */
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO registerUser (@RequestBody @Valid Registration user) {
+    public UserDTO registerUser (@RequestBody @Valid Registration user, HttpServletResponse resp) {
         User newUser = userService.registerUser(user);
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(newUser.getMealTimesList());

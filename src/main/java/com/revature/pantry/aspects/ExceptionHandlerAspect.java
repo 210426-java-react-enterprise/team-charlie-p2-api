@@ -5,6 +5,7 @@ import com.revature.pantry.exceptions.*;
 import com.revature.pantry.web.dtos.*;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.*;
 
@@ -122,6 +123,29 @@ public class ExceptionHandlerAspect {
                 request.getDescription(false)
         );
 
+        return message;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorMessage handleMethodArgumentNotValidException (MethodArgumentNotValidException e, WebRequest request) {
+        String errorMessage = "";
+        if(e.getMessage().contains("^[a-zA-Z0-9_.-]*$")) {
+            errorMessage = errorMessage.concat("The username cannot contain any special characters. ");
+        }
+        if(e.getMessage().contains("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$")){
+            errorMessage = errorMessage.concat("The password must be at least 8 characters and include at least 1 lowercase letter, " +
+                    "1 uppercase letter, 1 special character (#?!@$ %^&*-) and 1 number. ");
+        }
+        if(e.getMessage().contains("email")) {
+            errorMessage = errorMessage.concat("The email must be a valid email. (ex: something@mail.com)");
+        }
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                errorMessage,
+                request.getDescription(false)
+        );
         return message;
     }
 }
