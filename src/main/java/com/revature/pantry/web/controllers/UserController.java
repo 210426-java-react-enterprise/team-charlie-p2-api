@@ -51,7 +51,7 @@ public class UserController {
      */
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO registerUser (@RequestBody Registration user) {
+    public UserDTO registerUser (@RequestBody @Valid Registration user) {
         User newUser = userService.registerUser(user);
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(newUser.getMealTimesList());
