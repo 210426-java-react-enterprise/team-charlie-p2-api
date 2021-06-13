@@ -22,6 +22,14 @@ import javax.validation.constraints.NotNull;
             super();
         }
 
+        public RecipeDTO(String label, int calories, int yield, String url, String image) {
+            this.label = label;
+            this.calories = calories;
+            this.yield = yield;
+            this.url = url;
+            this.image = image;
+        }
+
         public String getLabel() {
             return label;
         }

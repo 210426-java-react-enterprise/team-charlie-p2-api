@@ -17,8 +17,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, QueryByExa
     User findUserByUsernameAndPassword(String username, String password);
 
     User findUserByUsername(String username);
-    
-    User findUserById(int id);
-
 
 }

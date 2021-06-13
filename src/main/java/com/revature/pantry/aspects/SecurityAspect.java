@@ -17,6 +17,14 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Secures any method that has the <code>@Secured</code> annotation. Checks the user's list of roles against the roles allowed for that method.
+ * Throws an AuthenticationException if a user tries to access a secured method with no authorization. Throws an AuthorizationException if
+ * the user does not have the required role.
+ *
+ * @author Richard Taylor
+ * @author Wezley Singleton
+ */
 @Aspect
 @Component
 public class SecurityAspect {
@@ -38,7 +46,6 @@ public class SecurityAspect {
         if (!allowedRoles.contains(principal.getRole().toString())) {
             throw new AuthorizationException("A forbidden request was made by: " + principal.getUsername());
         }
-
         return pjp.proceed();
     }
 }

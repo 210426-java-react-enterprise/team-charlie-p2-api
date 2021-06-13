@@ -1,13 +1,15 @@
 package com.revature.pantry.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.revature.pantry.web.dtos.FavoriteDTO;
+import sun.security.smartcardio.SunPCSC;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +19,11 @@ public class User {
 
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +39,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-//V2
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "meal_plan_id")
-//    private MealPlan mealPlan;
-    
-    //V3
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name= "user_meal_times",
@@ -50,34 +51,15 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     Role role;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    private List<UserFavoriteRecipe> favorites;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.user", cascade = CascadeType.ALL)
+    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
-    @ManyToMany (cascade = {CascadeType.ALL})
-    @JoinTable (
-            name = "user_favorite_recipe",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "recipe_id")}
-    )
-    private Set<Recipe> favorites = new HashSet<>();
-
-    public Set<Recipe> getFavorites() {
-        return favorites;
-    }
-
-    public void removeFavorite (Recipe recipe) {
-        this.favorites.remove(recipe);
-        recipe.getUsers().remove(this);
-    }
-
-    public void addFavorite(Recipe recipe) {
-        this.favorites.add(recipe);
-        recipe.getUsers().add(this);
-    }
-
-    public void setFavorites(Set<Recipe> favorites) {
-        this.favorites = favorites;
+    public List<FavoriteDTO> getFavorites() {
+        return favoriteRecipes.stream()
+                .filter(FavoriteRecipe::isFavorite)
+                .map(FavoriteDTO::new)
+                .sorted(Comparator.comparingInt(FavoriteDTO::getRecipeId))
+                .collect(Collectors.toList());
     }
 
     public Role getRole() {
@@ -87,13 +69,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-//V2
-//    public MealPlan getMealPlan() {
-//        return mealPlan;
-//    }
-//
-//    public void setMealPlan(MealPlan mealPlan) { this.mealPlan = mealPlan; }
     
     public List<MealTime> getMealTimesList() {
         return mealTimeList;
@@ -114,7 +89,8 @@ public class User {
         mealTime.getUserList().remove(this);
     }
     
-    public int getId() { return id;
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) { this.id = id; }
@@ -145,5 +121,13 @@ public class User {
 
     public enum Role {
         BASIC_USER, ADMIN;
+    }
+
+    public Set<FavoriteRecipe> getFavoriteRecipes() {
+        return favoriteRecipes;
+    }
+
+    public void setFavoriteRecipes(Set<FavoriteRecipe> favoriteRecipes) {
+        this.favoriteRecipes = favoriteRecipes;
     }
 }

@@ -1,6 +1,7 @@
 package com.revature.pantry.models;
 
 import com.fasterxml.jackson.annotation.*;
+import com.revature.pantry.web.dtos.RecipeDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ import java.util.*;
 @Entity
 @Table(name = "recipes")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Recipe {
+public class Recipe{
 
 
     @Id
@@ -40,20 +41,9 @@ public class Recipe {
     @JsonProperty("image")
     private String image;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-//    private List<UserFavoriteRecipe> favorites;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.recipe", cascade = CascadeType.ALL)
+    private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
-    @ManyToMany(mappedBy = "favorites")
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
-
-    //V2
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "recipes")
-//    private List<MealTime> mealTimes;
-
-    //V3
     @JsonIgnore
     @OneToMany(mappedBy = "recipe")
     private List<MealTime> mealTimeList;
@@ -66,6 +56,26 @@ public class Recipe {
 
     }
 
+    public Recipe(String label, String url, String image) {
+        this.label = label;
+        this.url = url;
+        this.image = image;
+    }
+
+    public Recipe(String label, String url, String image, int calories, int yield) {
+        this(label, url, image);
+        this.calories = calories;
+        this.yield = yield;
+    }
+
+    public Recipe(RecipeDTO recipeDTO) {
+        this.yield = recipeDTO.getYield();
+        this.calories = recipeDTO.getCalories();
+        this.url = recipeDTO.getUrl();
+        this.label = recipeDTO.getLabel();
+        this.image = recipeDTO.getImage();
+    }
+
     public String getImage() {
         return image;
     }
@@ -74,16 +84,6 @@ public class Recipe {
         this.image = image;
     }
 
-    //V2
-//    public List<MealTime> getMealTimes() {
-//        return mealTimes;
-//    }
-//
-//    public void setMealTimes(List<MealTime> mealTimes) {
-//        this.mealTimes = mealTimes;
-//    }
-    
-    //V3
     public List<MealTime> getMealTimeList() {
         return mealTimeList;
     }
@@ -140,20 +140,11 @@ public class Recipe {
         this.ingredientLines = ingredientLines;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<FavoriteRecipe> getFavoriteRecipes() {
+        return favoriteRecipes;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public void addUser(User user){
-        this.users.add(user);
-        user.getFavorites().add(this);
-    }
-    public void removeUser(User user) {
-        this.users.remove(user);
-        user.getFavorites().remove(this);
+    public void setFavoriteRecipes(Set<FavoriteRecipe> favoriteRecipes) {
+        this.favoriteRecipes = favoriteRecipes;
     }
 }
