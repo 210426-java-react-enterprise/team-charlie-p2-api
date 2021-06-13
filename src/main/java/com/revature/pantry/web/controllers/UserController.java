@@ -59,7 +59,7 @@ public class UserController {
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(newUser.getMealTimesList());
         userDTO.setUsername(newUser.getUsername());
- //       userDTO.setFavorites(newUser.getFavorites());
+        userDTO.setFavorites(newUser.getFavorites());
         userDTO.setUser_id(newUser.getId());
         return userDTO;
     }
