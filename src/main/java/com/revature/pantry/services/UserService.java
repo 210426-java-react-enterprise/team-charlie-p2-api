@@ -205,6 +205,7 @@ public class UserService {
             user.getFavoriteRecipes().stream()
                     .filter(favorite -> favorite.getRecipe().getId() == recipeId)
                     .forEach(recipe -> recipe.setFavorite(false));
+            userRepository.save(user);
             return true;
         } else {
             throw new InvalidRequestException();

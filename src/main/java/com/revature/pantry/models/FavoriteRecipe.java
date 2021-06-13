@@ -28,8 +28,8 @@ public class FavoriteRecipe {
 
     private boolean favorite;
 
-    @Column(name = "times_prepared")
-    private Integer timesPrepared;
+    @Column(name = "times_prepared", nullable = false)
+    private Integer timesPrepared = 0;
 
     public FavoriteRecipeId getPk() {
         return pk;
