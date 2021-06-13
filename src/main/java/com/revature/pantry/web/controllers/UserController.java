@@ -56,10 +56,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO registerUser (@RequestBody @Valid Registration user, HttpServletResponse resp) {
         User newUser = userService.registerUser(user);
+        //Sends back UserDTO with current data, which Favorites and MealTimeList should be empty
         UserDTO userDTO = new UserDTO();
         userDTO.setMealTimeList(newUser.getMealTimesList());
         userDTO.setUsername(newUser.getUsername());
- //       userDTO.setFavorites(newUser.getFavorites());
+        userDTO.setFavorites(newUser.getFavorites());
         userDTO.setUser_id(newUser.getId());
         return userDTO;
     }
