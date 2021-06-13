@@ -2,32 +2,36 @@ package com.revature.pantry.services;
 
 
 import com.revature.pantry.exceptions.*;
+import com.revature.pantry.models.FavoriteRecipe;
 import com.revature.pantry.models.Recipe;
-import com.revature.pantry.exceptions.UserDataIsInvalidException;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
-import com.revature.pantry.web.dtos.Credentials;
-import com.revature.pantry.web.dtos.RecipeDTO;
-import com.revature.pantry.web.dtos.UserDTO;
+import com.revature.pantry.web.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.function.BiPredicate;
 
+/**
+ * UserService
+ * <p>
+ * Service class that acts as a middleman between the repository and the endpoints.
+ * Contains various functions to handle transactions and database calls.
+ *
+ * @author Richard Taylor
+ * @author Kevin Chang
+ * @author Oswaldo Castillo
+ * @author Austin Knauer
+ * @author Uros Vorkapic
+ */
 @Service
 @Transactional
 public class UserService {
 
-    private UserRepository userRepository;
-    private RecipeRepository recipeRepository;
+    private final UserRepository userRepository;
+    private final RecipeRepository recipeRepository;
 
     @Autowired
     public UserService(UserRepository userRepository, RecipeRepository recipeRepository) {
@@ -35,88 +39,73 @@ public class UserService {
         this.recipeRepository = recipeRepository;
     }
 
-    public User authenticate(String username, String password) {
+    /**
+     * Takes the username and password provided and queries the database to see if valid credentials were provided.
+     *
+     * @param username The username passed in
+     * @param password The password passed in
+     * @return The authenticated user, throws an exception otherwise
+     * @throws AuthenticationException when either credential is incorrect.
+     * @author Kevin Chang
+     */
+    public User authenticate(String username, String password) throws AuthenticationException {
         User user = userRepository.findUserByUsernameAndPassword(username, password);
-        if(user == null){
+        if (user == null) {
             throw new AuthenticationException("You inputted an invalid username or password!");
         }
         return userRepository.findUserByUsernameAndPassword(username, password);
     }
-    
-    public User findUserById(int userId){
-        return userRepository.findUserById(userId);
-    }
+
     /**
-     * This method is responsible for validate the user data inputs against the app constraints
+     * Finds the user in the database from the id provided. Used as a utility method for other methods.
      *
-     * @return TRUE if data passed all the constraints
-     * @throws UserDataIsInvalidException - Return this exception if the User Data not satisfied the constraints
+     * @param userId the user Id to be searched
+     * @return The user if there is one, an exception otherwise.
+     * @throws InvalidRequestException when there is no user to be found
+     * @author Oswaldo Castillo
      */
-
-    private void isNullOrEmpty(String field,String strToEval) throws UserDataIsInvalidException {
-
-        //Evaluates if the string passed is null or empty
-        Predicate<String> isNullOrEmptyPredicate = str -> (str == null || str.trim().isEmpty());
-
-        if (isNullOrEmptyPredicate.test(strToEval)) {
-            throw new UserDataIsInvalidException(field + ": empty or null");
-        }
-    }
-    /**
-     * This method is part of isUserValid
-     *
-     * @param field     - that we want to evaluate
-     * @param limit     - to be evaluated with length of string
-     * @param strToEval - the string value from the field to be evaluated
-     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
-     */
-
-    private void isLengthValid(String field, int limit, String strToEval) throws UserDataIsInvalidException {
-       
-        //Evaluates if the string passed is inside of the length range
-        BiPredicate<String, Integer> eval = (str, length) -> str.length() > length;
-    
-        if(!eval.test(strToEval,20)){throw new UserDataIsInvalidException(field+ ": has more than "+limit+" characters");}
+    public User findUserById(int userId) throws InvalidRequestException {
+        return userRepository.findById(userId)
+                .orElseThrow(InvalidRequestException::new);
     }
 
     /**
-     * This method is part of isUserValid
+     * Takes in a (bean validated) registration and uses that to create a user account.
      *
-     * @param field            - that we want to evaluate
-     * @param inputPattern     - used to run the evaluation
-     * @param strToEval        - the string value from the field to be evaluated
-     * @param exceptionMessage - Message in case of exception
-     * @throws UserDataIsInvalidException - Exception returned if the strToEval doesn't pass the evaluation
+     * @param newUser The registration object containing user details
+     * @return The newly registered user
+     * @throws ResourcePersistenceException When either the username or email already exists within the database.
+     * @author Richard Taylor
+     * @author Kevin Chang
      */
-    private void isPatternSatisfied(String field, String inputPattern, String strToEval, String exceptionMessage) throws UserDataIsInvalidException {
-      
-        //Evaluates if the string passed satisfied the pattern passed
-        BiPredicate<String, String> eval = ((str, pattern) -> {
-            Pattern patternToCompile = Pattern.compile(pattern);
-            Matcher patternValidation = patternToCompile.matcher(str);
-            return patternValidation.matches();});
-            
-            if(!eval.test(strToEval, inputPattern)){ throw new UserDataIsInvalidException(field+": "+exceptionMessage);};
-    }
-
-    public User registerUser(User user) {
+    public User registerUser(Registration newUser) throws ResourcePersistenceException {
+        User user = new User(newUser.getUsername(), newUser.getPassword(), newUser.getEmail());
         user.setRole(User.Role.BASIC_USER);
         User registeredUser = null;
-        try{
+        try {
             registeredUser = userRepository.save(user);
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new ResourcePersistenceException("The registered email or username already exists!");
         }
         return registeredUser;
     }
 
-    public boolean removeUser(String username, Credentials creds) {
+    /**
+     * Takes a username and their provided credentials, ensures a match, then removes the user from the database.
+     *
+     * @param username The username to be passed in
+     * @param creds    The provided credentials
+     * @return True if the operation succeeds.
+     * @throws InvalidRequestException when there is invalid credentials provided
+     * @author Austin Knauer
+     */
+    public boolean removeUser(String username, Credentials creds) throws InvalidRequestException {
 
         if (!username.equals(creds.getUsername())) {
             throw new InvalidRequestException("Submitted username does not match currently logged in user.");
         }
 
-        User user = authenticate(creds.getUsername(), creds.getPassword());
+        User user = userRepository.findUserByUsernameAndPassword(creds.getUsername(), creds.getPassword());
 
         if (user == null) {
             throw new InvalidRequestException("Submitted password is incorrect.");
@@ -126,39 +115,68 @@ public class UserService {
         }
     }
 
-    public UserDTO addFavorite(RecipeDTO recipeDTO, String username) {
-        Optional<Recipe> _recipe = recipeRepository.findByUrl(recipeDTO.getUrl());
+    /**
+     * Adds a recipe to the user's list of favorites. Checks the database to see if the recipe exists first before
+     * saving the recipe to it.
+     *
+     * @param recipeDTO The recipe to be added
+     * @param username  The name of the user
+     * @return A DTO for the user
+     * @throws InvalidRequestException if a wrong username gets here somehow
+     * @author Richard Taylor
+     */
+    public UserDTO addFavorite(RecipeDTO recipeDTO, String username) throws InvalidRequestException {
+        Optional<Recipe> _recipe = recipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage());
         Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
         Recipe recipe = null;
-        UserDTO userDTO = new UserDTO();
 
         if (!_recipe.isPresent()) {
-            recipe = new Recipe();
-            recipe.setLabel(recipeDTO.getLabel());
-            recipe.setImage(recipeDTO.getImage());
-            recipe.setUrl(recipeDTO.getUrl());
-            recipe.setCalories(recipeDTO.getCalories());
-            recipe.setYield(recipeDTO.getYield());
-            recipe = recipeRepository.save(recipe);
+            recipe = recipeRepository.save(new Recipe(recipeDTO));
         }
         if (_user.isPresent()) {
             User user = _user.get();
-            recipe = (recipe == null) ? _recipe.get() : recipe;
-
-            user.addFavorite(recipe);
-            recipe.addUser(user);
-            userRepository.save(user);
-            recipeRepository.save(recipe);
-            userDTO.setFavorites(user.getFavorites());
-            userDTO.setUsername(user.getUsername());
-            userDTO.setMealTimeList(user.getMealTimesList());
-            userDTO.setUser_id(user.getId());
-            return userDTO;
+            //if the user has already interacted with this recipe, just set favorite to true if they want to re-add it to their
+            //list of favorites.
+            if (recipe == null) {
+                recipe = _recipe.get();
+                for (FavoriteRecipe favorite : user.getFavoriteRecipes()) {
+                    if (favorite.getRecipe().getId() == recipe.getId()) {
+                        favorite.setFavorite(true);
+                        return new UserDTO(userRepository.save(user));
+                    }
+                }
+            }
+            FavoriteRecipe newFavorite = new FavoriteRecipe(user, recipe, true, 0);
+            user.getFavoriteRecipes().add(newFavorite);
+            return new UserDTO(userRepository.save(user));
         } else {
-            throw new InvalidRequestException("Your request is invalid!");
+            throw new InvalidRequestException("A wrong username got here somehow.");
         }
     }
 
+    public void updateTimesPrepared(FavoriteDTO favoriteDTO, String username) {
+        Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
+        if (_user.isPresent()) {
+            User user = _user.get();
+            FavoriteRecipe favorite = user.getFavoriteRecipes()
+                    .stream().filter(recipe -> recipe.getRecipe().getId() == favoriteDTO.getRecipeId())
+                    .findFirst().orElseThrow(InvalidRequestException::new);
+            favorite.setTimesPrepared(favoriteDTO.getTimesPrepared());
+            userRepository.save(user);
+        } else {
+            throw new InvalidRequestException();
+        }
+    }
+
+
+    /**
+     * Takes a list of recipes and adds them to the user's list of favorites. Calls <code>addFavorite()</code> for each recipe.
+     *
+     * @param recipeDTO the list of recipes
+     * @param username  the username of the user to add the recipes to
+     * @return a userDTO containing the user's updated info
+     * @author Kevin Chang
+     */
     public UserDTO addFavorites(List<RecipeDTO> recipeDTO, String username) {
         UserDTO savedFavoriteUser = null;
         for (RecipeDTO recipe : recipeDTO) {
@@ -169,44 +187,61 @@ public class UserService {
         return savedFavoriteUser;
     }
 
-    public boolean removeFavoriteRecipe(String username, int recipeId) {
+    /**
+     * Removes a recipe from the user's list of favorites.
+     *
+     * @param username the username of the user
+     * @param recipeId the id of the recipe
+     * @return True of the operation succeeds
+     * @throws InvalidRequestException if wrong data makes its way to this method
+     */
+    public boolean removeFavoriteRecipe(String username, int recipeId) throws InvalidRequestException {
         Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
         Optional<Recipe> _recipe = recipeRepository.findById(recipeId);
 
-        if(_user.isPresent() && _recipe.isPresent()) {
+        if (_user.isPresent() && _recipe.isPresent()) {
             User user = _user.get();
-            Recipe recipe = _recipe.get();
-
-            user.removeFavorite(recipe);
-            recipe.removeUser(user);
+            user.getFavoriteRecipes().stream()
+                    .filter(favorite -> favorite.getRecipe().getId() == recipeId)
+                    .forEach(recipe -> recipe.setFavorite(false));
             userRepository.save(user);
-            recipeRepository.save(recipe);
             return true;
         } else {
             throw new InvalidRequestException();
         }
     }
 
-    public Set<Recipe> getFavoriteRecipes(String username) {
+    /**
+     * Returns the list of the user's favorite recipes
+     *
+     * @param username The username of the user
+     * @return The list of recipes from that user
+     * @throws InvalidRequestException if an invalid username is provided
+     * @author Richard Taylor
+     */
+    public List<FavoriteDTO> getFavoriteRecipes(String username) throws InvalidRequestException {
         Optional<User> _user = Optional.ofNullable(userRepository.findUserByUsername(username));
 
-        if(_user.isPresent()) {
-           return _user.get().getFavorites();
+        if (_user.isPresent()) {
+            List<FavoriteDTO> favorites = new ArrayList<>(_user.get().getFavorites());
+            favorites.sort(Comparator.comparingInt(FavoriteDTO::getRecipeId));
+            return favorites;
         } else {
             throw new InvalidRequestException();
         }
     }
-    
-    public UserDTO saveMealPlan(User user){
-        UserDTO userDTO = new UserDTO();
+
+    /**
+     * Saves the user object provided to the database. Utility function for meal plans (will be renamed if this method starts being used for something else)
+     *
+     * @param user The user to be saved
+     * @return True if it succeeds, any SQL exception generated by the repository otherwise.
+     */
+
+    public UserDTO saveMealPlan(User user) {
         User updatedUser = userRepository.save(user);
-        userDTO.setFavorites(updatedUser.getFavorites());
-        userDTO.setUsername(updatedUser.getUsername());
-        userDTO.setMealTimeList(updatedUser.getMealTimesList());
-        userDTO.setUser_id(updatedUser.getId());
-
-        return userDTO;
-
+        return new UserDTO(updatedUser);
     }
 }
+
 

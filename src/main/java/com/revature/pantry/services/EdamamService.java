@@ -28,6 +28,13 @@ public class EdamamService {
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * Takes in a query string and passes that to Edamam to search for recipes.
+     *
+     * @param q the query in the form of a string
+     * @return the first 10 recipes Edamam finds
+     * @author Kevin Chang
+     */
     public List<RecipeDTO> getRecipesFromEdamam(@RequestParam String q){
 
         String apiUrl = String.format("https://api.edamam.com/search?q=%s&app_id=%s&app_key=%s", q, app_id, app_key);

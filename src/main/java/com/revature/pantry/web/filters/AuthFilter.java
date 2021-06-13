@@ -42,9 +42,7 @@ public class AuthFilter implements Filter {
     private void parseToken(HttpServletRequest req) {
 
         try {
-
             String header = req.getHeader(jwtConfig.getHeader());
-            logger.info("Current header " + header);
             if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
                 logger.info("Request originates from an unauthenticated source.");
                 return;
@@ -60,10 +58,8 @@ public class AuthFilter implements Filter {
             Principal principal = new Principal(jwtClaims);
             req.setAttribute("principal", principal);
 
-
         } catch (Exception e) {
             logger.warn(String.format("%s was passed from AuthFilter with message: %s", e.getClass().getSimpleName(), e.getMessage()));
-
         }
     }
 }
