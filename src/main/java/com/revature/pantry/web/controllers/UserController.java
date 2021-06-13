@@ -78,6 +78,7 @@ public class UserController {
      */
     @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.removeUser(username, creds);
@@ -93,6 +94,7 @@ public class UserController {
      */
     @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.addFavorite(recipeDTO, username);
@@ -108,6 +110,7 @@ public class UserController {
      */
     @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public UserDTO favoriteRecipes(@RequestBody @Valid List<RecipeDTO> recipeDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.addFavorites(recipeDTO, username);
@@ -115,6 +118,7 @@ public class UserController {
 
     @PatchMapping(value = "/favorite")
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void updateTimesPrepared(@RequestBody FavoriteDTO favoriteDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.updateTimesPrepared(favoriteDTO, username);
@@ -128,6 +132,7 @@ public class UserController {
      */
     @DeleteMapping(value = "/favorite/{recipeId}")
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void removeFavorite(HttpServletRequest req, @PathVariable int recipeId) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.removeFavoriteRecipe(username, recipeId);
@@ -142,6 +147,7 @@ public class UserController {
      */
     @GetMapping(value = "/favorite")
     @ResponseStatus(HttpStatus.OK)
+    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public List<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.getFavoriteRecipes(username);
