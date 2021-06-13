@@ -163,8 +163,6 @@ public class UserService {
                     .findFirst().orElseThrow(InvalidRequestException::new);
             favorite.setTimesPrepared(favoriteDTO.getTimesPrepared());
             userRepository.save(user);
-
-
         } else {
             throw new InvalidRequestException();
         }
