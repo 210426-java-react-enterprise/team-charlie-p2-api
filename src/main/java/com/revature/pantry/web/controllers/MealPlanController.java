@@ -5,10 +5,12 @@ package com.revature.pantry.web.controllers;
 //import com.revature.pantry.models.MealPlan;
 import com.revature.pantry.models.MealTime;
 import com.revature.pantry.models.User;
+import com.revature.pantry.repos.*;
 import com.revature.pantry.services.MealService;
 import com.revature.pantry.services.RecipeService;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.*;
+import com.revature.pantry.web.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,18 +28,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/meals")
 public class MealPlanController {
         
-        private MealService mealService;
-        private RecipeService recipeService;
+//        private MealService mealService;
         private UserService userService;
+        private MealTimeRepository mealTimeRepository;
         
         @Autowired
-        public MealPlanController(MealService mealservice, RecipeService recipeService, UserService userService) {
-                this.mealService = mealservice;
-                this.recipeService = recipeService;
+        public MealPlanController(MealTimeRepository mealTimeRepository, UserService userService) {
+//               this.mealService = mealservice;
+                this.mealTimeRepository = mealTimeRepository;
                 this.userService = userService;
         }
         
         @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
+        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
         public UserDTO savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
                 //TODO Need to handle null users
                 User user = userService.findUserById(mealPlan.getUserId());
@@ -46,7 +49,7 @@ public class MealPlanController {
                         mealTime.setDate(mealTimeDTO.getDate());
                         mealTime.setMealTime(mealTimeDTO.getTime());
                         mealTime.setRecipe(mealTimeDTO.getRecipe());
-                        user.getMealTimesList().add(mealService.saveMealTime(mealTime));
+                        user.getMealTimesList().add(mealTimeRepository.save(mealTime));
                 });
                 return userService.saveMealPlan(user);
         }
@@ -54,6 +57,7 @@ public class MealPlanController {
         
         //V3
         @GetMapping(value = "/find", produces = APPLICATION_JSON_VALUE)
+        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
         public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
         MealPlanDTO mealPlanDTO = new MealPlanDTO();
         User user = userService.findUserById(userId);

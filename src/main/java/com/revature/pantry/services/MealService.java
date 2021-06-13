@@ -19,6 +19,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Deprecated
 @Service
 public class MealService {
     
