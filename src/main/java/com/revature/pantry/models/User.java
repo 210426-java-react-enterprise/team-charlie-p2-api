@@ -5,6 +5,7 @@ import com.revature.pantry.web.dtos.FavoriteDTO;
 import sun.security.smartcardio.SunPCSC;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -53,11 +54,12 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pk.user", cascade = CascadeType.ALL)
     private Set<FavoriteRecipe> favoriteRecipes = new HashSet<>();
 
-    public Set<FavoriteDTO> getFavorites() {
-        return this.favoriteRecipes.stream()
+    public List<FavoriteDTO> getFavorites() {
+        return favoriteRecipes.stream()
                 .filter(FavoriteRecipe::isFavorite)
                 .map(FavoriteDTO::new)
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparingInt(FavoriteDTO::getRecipeId))
+                .collect(Collectors.toList());
     }
 
     public Role getRole() {

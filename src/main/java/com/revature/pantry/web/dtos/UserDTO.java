@@ -8,6 +8,16 @@ import java.util.Set;
 
 public class UserDTO {
 
+    @NotNull
+    private int user_id;
+
+    @NotNull
+    private String username;
+
+    private List<FavoriteDTO> favorites;
+
+    private List<MealTime> mealTimeList;
+
     public UserDTO() {
 
     }
@@ -19,30 +29,21 @@ public class UserDTO {
         this.mealTimeList = user.getMealTimesList();
     }
 
-    public UserDTO(String username, Set<FavoriteDTO> favorites) {
+    public UserDTO(String username, List<FavoriteDTO> favorites) {
         this.username = username;
         this.favorites = favorites;
     }
 
-    public UserDTO(String username, Set<FavoriteDTO> favorites, int userId) {
+    public UserDTO(String username, List<FavoriteDTO> favorites, int userId) {
         this(username, favorites);
         this.user_id = userId;
     }
-    public UserDTO(@NotNull String username, Set<FavoriteDTO> favorites, List<MealTime> mealTimeList) {
+    public UserDTO(@NotNull String username, List<FavoriteDTO> favorites, List<MealTime> mealTimeList) {
         this.username = username;
         this.favorites = favorites;
         this.mealTimeList = mealTimeList;
     }
 
-    @NotNull
-    private int user_id;
-
-    @NotNull
-    private String username;
-
-    private Set<FavoriteDTO> favorites;
-
-    private List<MealTime> mealTimeList;
 
     public String getUsername() {
         return username;
@@ -52,11 +53,11 @@ public class UserDTO {
         this.username = username;
     }
 
-    public Set<FavoriteDTO> getFavorites() {
+    public List<FavoriteDTO> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(Set<FavoriteDTO> favorites) {
+    public void setFavorites(List<FavoriteDTO> favorites) {
         this.favorites = favorites;
     }
 

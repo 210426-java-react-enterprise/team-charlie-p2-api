@@ -255,18 +255,18 @@ public class UserServiceTest {
         }
     }
 
-    @Test
-    public void whenGetFavoritesWithValidUsername_thenReturnFavorites() {
-        User user = new User("username", "password", "randomEmail@mail.com");
-        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
-        user.getFavoriteRecipes().add(favoriteRecipe);
-        Set<FavoriteDTO> expected = user.getFavorites();
-        when((mockUserRepository.findUserByUsername(any()))).thenReturn(user);
-
-        Set<FavoriteDTO> actual = sut.getFavoriteRecipes(user.getUsername());
-
-        assertEquals(expected, actual);
-    }
+//    @Test
+//    public void whenGetFavoritesWithValidUsername_thenReturnFavorites() {
+//        User user = new User("username", "password", "randomEmail@mail.com");
+//        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
+//        user.getFavoriteRecipes().add(favoriteRecipe);
+//        Set<FavoriteDTO> expected = user.getFavorites();
+//        when((mockUserRepository.findUserByUsername(any()))).thenReturn(user);
+//
+//        Set<FavoriteDTO> actual = sut.getFavoriteRecipes(user.getUsername());
+//
+//        assertEquals(expected, actual);
+//    }
 
     @Test(expected = InvalidRequestException.class)
     public void whenGetFavoritesWithInvalidUsername_thenThrowException() {

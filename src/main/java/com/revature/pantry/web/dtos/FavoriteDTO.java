@@ -4,20 +4,6 @@ import com.revature.pantry.models.FavoriteRecipe;
 
 public class FavoriteDTO {
 
-    public FavoriteDTO(FavoriteRecipe recipe) {
-        this.calories = recipe.getRecipe().getCalories();
-        this.yield = recipe.getRecipe().getYield();
-        this.image = recipe.getRecipe().getImage();
-        this.url = recipe.getRecipe().getUrl();
-        this.label = recipe.getRecipe().getLabel();
-        this.recipeId = recipe.getRecipe().getId();
-        this.timesPrepared = recipe.getTimesPrepared();
-    }
-
-    public FavoriteDTO () {
-
-    }
-
     private String label;
 
     private String url;
@@ -31,6 +17,20 @@ public class FavoriteDTO {
     private Integer timesPrepared;
 
     private Integer recipeId;
+
+    public FavoriteDTO(FavoriteRecipe recipe) {
+        this.calories = recipe.getRecipe().getCalories();
+        this.yield = recipe.getRecipe().getYield();
+        this.image = recipe.getRecipe().getImage();
+        this.url = recipe.getRecipe().getUrl();
+        this.label = recipe.getRecipe().getLabel();
+        this.recipeId = recipe.getRecipe().getId();
+        this.timesPrepared = recipe.getTimesPrepared();
+    }
+
+    public FavoriteDTO () {
+
+    }
 
     public String getLabel() {
         return label;

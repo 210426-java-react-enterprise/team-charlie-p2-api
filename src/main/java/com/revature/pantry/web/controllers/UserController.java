@@ -144,7 +144,7 @@ public class UserController {
      */
     @GetMapping(value = "/favorite")
     @ResponseStatus(HttpStatus.OK)
-    public Set<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
+    public List<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.getFavoriteRecipes(username);
     }
