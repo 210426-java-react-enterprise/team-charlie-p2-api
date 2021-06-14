@@ -49,5 +49,24 @@ import javax.validation.constraints.NotNull;
             return image;
         }
 
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public void setCalories(int calories) {
+            this.calories = calories;
+        }
+
+        public void setYield(int yield) {
+            this.yield = yield;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
     }
 

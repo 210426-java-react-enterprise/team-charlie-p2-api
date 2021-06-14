@@ -55,15 +55,6 @@ public class UserController {
         return new UserDTO(newUser);
     }
 
-    /**
-     * Returns a list of all registered users. Can only be accessed by an admin.
-     * @return a list of all users.
-     */
-    @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
-    @Secured(allowedRoles = {"ADMIN"})
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     /**
      * Takes in a set of credentials and performs basic validation on them. Then calls the services to delete a user account.
@@ -74,26 +65,10 @@ public class UserController {
      */
     @DeleteMapping(value = "/account", consumes = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void deleteUser(@RequestBody @Valid Credentials creds, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.removeUser(username, creds);
-    }
-
-    /**
-     * Takes in a JSON for a recipe and calls the service to add it to the list of the user's favorites.
-     *
-     * @param recipeDTO the JSON of the recipe
-     * @param req the request provided by Spring
-     * @return an updated DTO of the user
-     * @author Richard Taylor
-     */
-    @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
-    public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
-        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
-        return userService.addFavorite(recipeDTO, username);
     }
 
     /**
@@ -106,15 +81,15 @@ public class UserController {
      */
     @PostMapping(value = "/favorites", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public UserDTO favoriteRecipes(@RequestBody @Valid List<RecipeDTO> recipeDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.addFavorites(recipeDTO, username);
     }
 
-    @PatchMapping(value = "/favorite")
+    @PatchMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void updateTimesPrepared(@RequestBody FavoriteDTO favoriteDTO, HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.updateTimesPrepared(favoriteDTO, username);
@@ -141,7 +116,7 @@ public class UserController {
      * @return a list of recipes in the form of a JSON
      * @author Richard Taylor
      */
-    @GetMapping(value = "/favorite")
+    @GetMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
    // @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public List<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
