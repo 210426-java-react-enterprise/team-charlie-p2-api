@@ -1,7 +1,6 @@
 package com.revature.pantry.web.controllers;
 
 import com.revature.pantry.models.User;
-import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.Credentials;
 import com.revature.pantry.web.dtos.UserDTO;

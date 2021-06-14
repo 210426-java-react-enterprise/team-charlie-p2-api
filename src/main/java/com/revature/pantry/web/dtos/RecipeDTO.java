@@ -1,7 +1,6 @@
 package com.revature.pantry.web.dtos;
 
 import com.fasterxml.jackson.annotation.*;
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
