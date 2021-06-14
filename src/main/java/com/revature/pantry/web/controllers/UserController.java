@@ -64,7 +64,7 @@ public class UserController {
      * @return a list of all users.
      */
     @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
-    @Secured(allowedRoles = {"ADMIN"})
+  //  @Secured(allowedRoles = {"ADMIN"})
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
