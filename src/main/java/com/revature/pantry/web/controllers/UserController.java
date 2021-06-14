@@ -113,7 +113,7 @@ public class UserController {
      */
     @DeleteMapping(value = "/favorite/{recipeId}")
     @ResponseStatus(HttpStatus.OK)
-//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+   // @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void removeFavorite(HttpServletRequest req, @PathVariable int recipeId) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         userService.removeFavoriteRecipe(username, recipeId);
@@ -128,7 +128,7 @@ public class UserController {
      */
     @GetMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+   // @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public List<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
         String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
         return userService.getFavoriteRecipes(username);
