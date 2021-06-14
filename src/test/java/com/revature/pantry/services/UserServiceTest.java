@@ -7,18 +7,12 @@ import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.RecipeRepository;
 import com.revature.pantry.repos.UserRepository;
-import com.revature.pantry.web.dtos.Credentials;
-import com.revature.pantry.web.dtos.FavoriteDTO;
-import com.revature.pantry.web.dtos.RecipeDTO;
-import com.revature.pantry.web.dtos.UserDTO;
+import com.revature.pantry.web.dtos.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -136,6 +130,37 @@ public class UserServiceTest {
         }
     }
 
+
+    @Test
+    public void whenRegisterUserWithValidCredentails_thenReturnUser() {
+        User user = new User("username", "P4ssword!", "someone@mail.com");
+        User expected = new User("username", "P4ssword!", "someone@mail.com");
+        expected.setRole(User.Role.BASIC_USER);
+
+        when(mockUserRepository.save(any())).thenReturn(expected);
+
+        User actual = sut.registerUser(new Registration(user.getUsername(), user.getPassword(), user.getEmail()));
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void whenUpdatePreparedWithValidData_thenSucceed() {
+        User user = new User("username", "P4ssword!", "someone@mail.com");
+        Recipe recipe = new Recipe();
+        recipe.setId(1);
+        FavoriteDTO favoriteDTO = new FavoriteDTO();
+        favoriteDTO.setRecipeId(1);
+        FavoriteRecipe favoriteRecipe = new FavoriteRecipe(user, recipe, true, 0);
+        user.getFavoriteRecipes().add(favoriteRecipe);
+        when(mockUserRepository.findUserByUsername("username")).thenReturn(user);
+
+        sut.updateTimesPrepared(favoriteDTO, user.getUsername());
+
+        verify(mockUserRepository, times(1)).save(any());
+
+    }
+
     @Test
     public void whenRemoveUserWithInvalidPassword_thenThrowException() {
         Credentials credentials = new Credentials("username", "wrongPassword");
@@ -152,27 +177,28 @@ public class UserServiceTest {
         }
     }
 
-//    @Test
-//    public void whenAddFavoriteWithValidDetails_thenReturnDTO() {
-//        //Arrange
-//        RecipeDTO recipeDTO = new RecipeDTO("food", 100, 3, "someUrl", "someImage");
-//        String username = "username";
-//        User user = new User(username, "password", "randomEmail@mail.com");
-//    //    user.addFavorite(new Recipe(recipeDTO));
-//       // UserDTO expected = new UserDTO(user.getUsername(), user.getFavorites());
-//
-//        when(mockUserRepository.findUserByUsername(user.getUsername())).thenReturn(user);
-//        when(mockRecipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage()))
-//                .thenReturn(Optional.empty());
-//        when(mockRecipeRepository.save(any())).thenReturn(new Recipe(recipeDTO));
-//        when(mockUserRepository.save(any())).thenReturn(user);
-//
-//        //Act
-//        UserDTO actual = sut.addFavorite(recipeDTO, user.getUsername());
-//
-//        verify(mockUserRepository, times(1)).save(any());
-//        verify(mockRecipeRepository, times(2)).save(any());
-//    }
+    @Test
+    public void whenAddFavoriteWithValidDetails_thenReturnDTO() {
+        RecipeDTO recipeDTO = new RecipeDTO("food", 100, 3, "someUrl", "someImage");
+        String username = "username";
+        User expectedUser = new User(username, "password", "randomEmail@mail.com");
+        User actualUser = new User(username, "password", "randomEmail@mail.com");
+        FavoriteRecipe fav = new FavoriteRecipe(expectedUser, new Recipe(recipeDTO), true, 0);
+        expectedUser.getFavoriteRecipes().add(fav);
+        UserDTO expected = new UserDTO(expectedUser.getUsername(), expectedUser.getFavorites());
+
+        when(mockUserRepository.findUserByUsername(actualUser.getUsername())).thenReturn(actualUser);
+        when(mockRecipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage()))
+                .thenReturn(Optional.empty());
+        when(mockRecipeRepository.save(any())).thenReturn(new Recipe(recipeDTO));
+        when(mockUserRepository.save(any())).thenReturn(actualUser);
+
+        UserDTO actual = sut.addFavorite(recipeDTO, username);
+
+        assertEquals(expected.getFavorites().get(0).getLabel(), actual.getFavorites().get(0).getLabel());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        verify(mockUserRepository, times(1)).save(any());
+    }
 
     @Test
     public void whenAddFavoriteWithInvalidUser_thenThrowExceotion() {
@@ -197,29 +223,32 @@ public class UserServiceTest {
 
     }
 
-//    @Test
-//    public void whenAddFavoritesWithValidInputs_thenReturnDTO() {
-//        RecipeDTO recipeDTO = new RecipeDTO("food", 100, 3, "someUrl", "someImage");
-//        RecipeDTO otherDTO = new RecipeDTO("otherFood", 200, 3, "someOtherUrl", "someOtherImage");
-//        List<RecipeDTO> recipes = Arrays.asList(recipeDTO, otherDTO);
-//        String username = "username";
-//        User user = new User(username, "password", "randomEmail@mail.com");
-//      // // recipes.forEach(dto -> user.addFavorite(new Recipe(dto)));
-//        UserDTO expected = new UserDTO(user.getUsername(), user.getFavorites());
-//
-//        when(mockUserRepository.findUserByUsername(user.getUsername())).thenReturn(user);
-//        when(mockRecipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage()))
-//                .thenReturn(Optional.empty());
-//        when(mockRecipeRepository.save(any())).thenReturn(new Recipe(recipeDTO));
-//        when(mockUserRepository.save(any())).thenReturn(user);
-//
-//        UserDTO actual = sut.addFavorites(recipes, user.getUsername());
-//
-//        assertEquals(expected.getFavorites(), actual.getFavorites());
-//        assertEquals(expected.getUsername(), actual.getUsername());
-//        verify(mockUserRepository, times(2)).save(any());
-//        verify(mockRecipeRepository, times(4)).save(any());
-//    }
+    @Test
+    public void whenAddFavoritesWithValidInputs_thenReturnDTO() {
+        RecipeDTO recipeDTO = new RecipeDTO("food", 100, 3, "someUrl", "someImage");
+        List<RecipeDTO> recipes = new ArrayList<>();
+        recipes.add(recipeDTO);
+        String username = "username";
+        User expectedUser = new User(username, "password", "randomEmail@mail.com");
+        User actualUser = new User(username, "password", "randomEmail@mail.com");
+        FavoriteRecipe fav = new FavoriteRecipe(expectedUser, new Recipe(recipeDTO), true, 0);
+
+        expectedUser.getFavoriteRecipes().add(fav);
+        UserDTO expected = new UserDTO(expectedUser.getUsername(), expectedUser.getFavorites());
+
+        when(mockUserRepository.findUserByUsername(actualUser.getUsername())).thenReturn(actualUser);
+        when(mockRecipeRepository.findByLabelAndUrlAndImage(recipeDTO.getLabel(), recipeDTO.getUrl(), recipeDTO.getImage()))
+                .thenReturn(Optional.empty());
+        when(mockRecipeRepository.save(any())).thenReturn(new Recipe(recipeDTO));
+        when(mockUserRepository.save(any())).thenReturn(actualUser);
+
+        UserDTO actual = sut.addFavorites(recipes, actualUser.getUsername());
+
+        assertEquals(expected.getFavorites().get(0).getLabel(), actual.getFavorites().get(0).getLabel());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        verify(mockUserRepository, times(1)).save(any());
+        verify(mockRecipeRepository, times(1)).save(any());
+    }
 
     @Test
     public void whenRemoveFavoriteWithValidInput_thenReturnTrue() {
@@ -255,18 +284,18 @@ public class UserServiceTest {
         }
     }
 
-//    @Test
-//    public void whenGetFavoritesWithValidUsername_thenReturnFavorites() {
-//        User user = new User("username", "password", "randomEmail@mail.com");
-//        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
-//        user.getFavoriteRecipes().add(favoriteRecipe);
-//        Set<FavoriteDTO> expected = user.getFavorites();
-//        when((mockUserRepository.findUserByUsername(any()))).thenReturn(user);
-//
-//        Set<FavoriteDTO> actual = sut.getFavoriteRecipes(user.getUsername());
-//
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    public void whenGetFavoritesWithValidUsername_thenReturnFavorites() {
+        User user = new User("username", "password", "randomEmail@mail.com");
+        FavoriteRecipe favoriteRecipe = new FavoriteRecipe();
+        user.getFavoriteRecipes().add(favoriteRecipe);
+        List<FavoriteDTO> expected = user.getFavorites();
+        when((mockUserRepository.findUserByUsername(any()))).thenReturn(user);
+
+        List<FavoriteDTO> actual = sut.getFavoriteRecipes(user.getUsername());
+
+        assertEquals(expected, actual);
+    }
 
     @Test(expected = InvalidRequestException.class)
     public void whenGetFavoritesWithInvalidUsername_thenThrowException() {

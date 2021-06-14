@@ -38,3 +38,6 @@ src/main/java/com/revature/pantry/web/controllers/OAuthController.java
 
 #Build Folders
 target/
+
+#DB creation script
+src/main/resources/DB_script.sql

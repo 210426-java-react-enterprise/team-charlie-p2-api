@@ -22,6 +22,12 @@ public class Registration {
 
     }
 
+    public Registration(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
     }
