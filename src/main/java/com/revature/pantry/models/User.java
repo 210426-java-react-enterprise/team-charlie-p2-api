@@ -2,7 +2,6 @@ package com.revature.pantry.models;
 
 
 import com.revature.pantry.web.dtos.FavoriteDTO;
-import sun.security.smartcardio.SunPCSC;
 
 import javax.persistence.*;
 import java.util.Comparator;

@@ -1,6 +1,5 @@
 package com.revature.pantry.web.controllers;
 
-import com.revature.pantry.exceptions.InvalidRecipeException;
 import org.springframework.web.bind.annotation.*;
 import com.revature.pantry.models.*;
 import com.revature.pantry.services.*;

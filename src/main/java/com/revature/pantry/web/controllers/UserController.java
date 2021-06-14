@@ -1,14 +1,11 @@
 package com.revature.pantry.web.controllers;
 
-import com.revature.pantry.models.Recipe;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.UserRepository;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.util.JwtUtil;
 import com.revature.pantry.web.dtos.*;
 import com.revature.pantry.web.security.Secured;
-import jdk.jfr.internal.LogLevel;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 import static org.springframework.http.MediaType.*;
 

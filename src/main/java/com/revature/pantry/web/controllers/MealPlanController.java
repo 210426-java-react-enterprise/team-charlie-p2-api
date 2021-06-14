@@ -6,8 +6,6 @@ package com.revature.pantry.web.controllers;
 import com.revature.pantry.models.MealTime;
 import com.revature.pantry.models.User;
 import com.revature.pantry.repos.*;
-import com.revature.pantry.services.MealService;
-import com.revature.pantry.services.RecipeService;
 import com.revature.pantry.services.UserService;
 import com.revature.pantry.web.dtos.*;
 import com.revature.pantry.web.security.*;
@@ -15,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
