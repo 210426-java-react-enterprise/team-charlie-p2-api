@@ -40,7 +40,7 @@ public class MealPlanController {
         }
         
         @PutMapping(value = "/save/plan", consumes = APPLICATION_JSON_VALUE)
-        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+//        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
         public UserDTO savePlan(@RequestBody @Valid MealPlanDTO mealPlan) {
                 //TODO Need to handle null users
                 User user = userService.findUserById(mealPlan.getUserId());
@@ -57,7 +57,7 @@ public class MealPlanController {
         
         //V3
         @GetMapping(value = "/find", produces = APPLICATION_JSON_VALUE)
-        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
+//        @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
         public MealPlanDTO findMealPlanByUserId(@RequestParam @Valid int userId){
         MealPlanDTO mealPlanDTO = new MealPlanDTO();
         User user = userService.findUserById(userId);
