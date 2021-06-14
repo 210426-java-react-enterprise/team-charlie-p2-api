@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class MealTimeDTO {
     
-    @NotNull
+  //  @NotNull
     @DateTimeFormat
     @JsonProperty("date")
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
