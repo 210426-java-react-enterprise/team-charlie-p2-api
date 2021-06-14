@@ -4,7 +4,6 @@ import com.revature.pantry.models.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 
 public class UserDTO {
 

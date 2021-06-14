@@ -1,25 +1,19 @@
 package com.revature.pantry.web.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.pantry.models.MealTime;
-import io.swagger.models.auth.In;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MealPlanDTO {
 
     @NotNull
-    @JsonProperty("user-id")
+    @JsonProperty("userId")
     private int userId;
     
     //V3
     @NotNull
-    @JsonProperty("day-plan-list")
+    @JsonProperty("dayPlanList")
     private List<MealTimeDTO> dayPlanList;
     
     

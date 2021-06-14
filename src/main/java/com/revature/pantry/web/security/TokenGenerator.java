@@ -1,7 +1,6 @@
 package com.revature.pantry.web.security;
 
 import com.revature.pantry.models.User;
-import com.revature.pantry.web.security.JwtConfig;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
