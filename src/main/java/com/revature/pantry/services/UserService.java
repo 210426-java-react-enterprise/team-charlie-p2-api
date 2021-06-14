@@ -164,7 +164,7 @@ public class UserService {
             favorite.setTimesPrepared(favoriteDTO.getTimesPrepared());
             userRepository.save(user);
         } else {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("An invalid request was made!");
         }
     }
 

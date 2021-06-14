@@ -82,22 +82,6 @@ public class UserController {
     }
 
     /**
-     * Takes in a JSON for a recipe and calls the service to add it to the list of the user's favorites.
-     *
-     * @param recipeDTO the JSON of the recipe
-     * @param req the request provided by Spring
-     * @return an updated DTO of the user
-     * @author Richard Taylor
-     */
-    @PostMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-//    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
-    public UserDTO favoriteRecipe(@RequestBody @Valid RecipeDTO recipeDTO, HttpServletRequest req) {
-        String username = jwtUtil.getUsernameFromToken(req.getHeader(header));
-        return userService.addFavorite(recipeDTO, username);
-    }
-
-    /**
      * Takes a JSON for a list of recipes and calls the service to add it to the list of the user's favorites
      *
      * @param recipeDTO the JSON of the recipes
@@ -113,7 +97,7 @@ public class UserController {
         return userService.addFavorites(recipeDTO, username);
     }
 
-    @PatchMapping(value = "/favorite")
+    @PatchMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
 //    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public void updateTimesPrepared(@RequestBody FavoriteDTO favoriteDTO, HttpServletRequest req) {
@@ -142,7 +126,7 @@ public class UserController {
      * @return a list of recipes in the form of a JSON
      * @author Richard Taylor
      */
-    @GetMapping(value = "/favorite")
+    @GetMapping(value = "/favorite", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
 //    @Secured(allowedRoles = {"BASIC_USER", "ADMIN"})
     public List<FavoriteDTO> getFavoriteRecipes(HttpServletRequest req) {
