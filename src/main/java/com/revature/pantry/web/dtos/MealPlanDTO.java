@@ -8,12 +8,12 @@ import java.util.List;
 public class MealPlanDTO {
 
     @NotNull
-    @JsonProperty("user-id")
+    @JsonProperty("userId")
     private int userId;
     
     //V3
     @NotNull
-    @JsonProperty("day-plan-list")
+    @JsonProperty("dayPlanList")
     private List<MealTimeDTO> dayPlanList;
     
     
