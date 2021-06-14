@@ -18,7 +18,7 @@ public class MealTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mealTimeId;
     
-    @NotNull
+   //@NotNull
     @Column(name = "meal_date")
     @JsonProperty("date")
     LocalDate date;
