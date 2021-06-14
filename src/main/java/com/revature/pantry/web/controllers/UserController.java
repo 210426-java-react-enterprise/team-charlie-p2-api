@@ -55,16 +55,6 @@ public class UserController {
         return new UserDTO(newUser);
     }
 
-    /**
-     * Returns a list of all registered users. Can only be accessed by an admin.
-     * @return a list of all users.
-     */
-    @GetMapping(value = "/users", produces = APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-//    @Secured(allowedRoles = {"ADMIN"})
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     /**
      * Takes in a set of credentials and performs basic validation on them. Then calls the services to delete a user account.
