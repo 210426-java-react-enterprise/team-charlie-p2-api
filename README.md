@@ -4,18 +4,18 @@ Pantry.io is a web application that allows users to search for recipes based on 
 Our goal is to create an application that inspires users to discover new recipes and organize them in a way that best suits their needs.
 
 # Technologies Used
-Java - version 1.8
-PostgreSQL - version 42.2.12
-React - version 17.0.2
-Bootstrap - version 4.6.0
-Spring Boot - version 2.5.1
-JSON Web Tokens - version 0.9.1
-Maven - version 3.8.1
-Git - version 2.31.1
-JUnit - version 4.13.2
-Mockito - version 3.9.0
-Swagger - version 3.0.0
-Postman - version 8.3.0
+Java - version 1.8  
+PostgreSQL - version 42.2.12  
+React - version 17.0.2  
+Bootstrap - version 4.6.0  
+Spring Boot - version 2.5.1  
+JSON Web Tokens - version 0.9.1  
+Maven - version 3.8.1  
+Git - version 2.31.1  
+JUnit - version 4.13.2  
+Mockito - version 3.9.0  
+Swagger - version 3.0.0  
+Postman - version 8.3.0  
 AWS EC2
 AWS S3
 AWS CodeBuild
