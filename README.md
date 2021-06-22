@@ -9,6 +9,7 @@ PostgreSQL - version 42.2.12
 React - version 17.0.2
 Bootstrap - version 4.6.0
 Spring Boot - version 2.5.1
+JSON Web Tokens - version 0.9.1
 Maven - version 3.8.1
 Git - version 2.31.1
 JUnit - version 4.13.2
@@ -26,7 +27,7 @@ AWS Elastic Beanstalk
 # Features
 - Login and Registration
 - Logout and delete user
-- View most componenets in a user Dashboard
+- View most components in a user Dashboard
 - Takes in User ingredient input for searching for recipes
 - Query External API for Recipes
 - Favorite queried recipes and saves them to the user's acconut
