@@ -105,7 +105,7 @@ npm start
 
 
 # Contributors
-Team Lead: Kevin Chang  
+Team Lead: Khloe Chang  
 Git-flow Manager: Richard Taylor  
 DevOps Manager: Uros Vorkapic   
 UI Lead: Austin Knauer  
